@@ -1,5 +1,6 @@
 package it.epicode.entity.user;
 
+import it.epicode.entity.biglietteria.Ruolo;
 import it.epicode.entity.biglietteria.Tessera;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,7 +20,12 @@ public abstract class  User {
     @Column(nullable = false)
     private String cognome;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Ruolo ruolo;
+
     @OneToOne
     private Tessera tessera;
+
 
 }

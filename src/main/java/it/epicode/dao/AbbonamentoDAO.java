@@ -37,5 +37,13 @@ public class AbbonamentoDAO {
         em.getTransaction().commit();
     }
 
+    public void saveAllAbbonamenti(List<Abbonamento> abbonamenti) {
+        em.getTransaction().begin();
+        for (Abbonamento abbonamento : abbonamenti) {
+            em.persist(abbonamento);
+        }
+        em.getTransaction().commit();
+    }
+
 
 }

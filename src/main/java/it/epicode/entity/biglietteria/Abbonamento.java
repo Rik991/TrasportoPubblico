@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "abbonamenti")
 @NamedQuery(name = "Trova_tutto_Abbonamento", query = "SELECT a FROM Abbonamento a")
 public class Abbonamento {
     @Id
@@ -13,12 +14,14 @@ public class Abbonamento {
 
 
     @ManyToOne
-    @JoinColumn(name = "rivenditore_id")
-    private Rivenditore rivenditore;
+    @JoinColumn(name = "vendita_id")
+    private Vendita vendita;
 
     @ManyToOne
     @JoinColumn(name = "tratta_id")
     private Tratta tratta;
 
+    @OneToOne
+    private Tessera tessera;
 
 }

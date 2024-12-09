@@ -37,5 +37,11 @@ public class TesseraDAO {
         em.getTransaction().commit();
     }
 
+    public void saveAllTessere(List<Tessera> tessere) {
+        em.getTransaction().begin();
+        tessere.forEach(em::persist);
+        em.getTransaction().commit();
+    }
+
 
 }

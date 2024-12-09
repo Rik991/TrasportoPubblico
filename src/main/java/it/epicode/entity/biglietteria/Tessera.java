@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@Table(name = "tessere")
 @NamedQuery(name = "Trova_tutto_Tessera", query = "SELECT a FROM Tessera a")
 public class Tessera {
     @Id
@@ -28,17 +29,10 @@ public class Tessera {
     @Column(nullable = false)
     private boolean attiva;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Ruolo ruolo;
-
-
-    @OneToOne
-    private Abbonamento abbonamento;
 
     @ManyToOne
-    @JoinColumn(name = "rivenditore_id")
-    private Rivenditore rivenditore;
+    @JoinColumn(name = "vendita_id")
+    private Vendita vendita;
 
 
 

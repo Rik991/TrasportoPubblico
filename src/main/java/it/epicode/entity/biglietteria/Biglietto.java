@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "biglietti")
 @NamedQuery(name = "Trova_tutto_Biglietto", query = "SELECT a FROM Biglietto a")
 public class Biglietto {
     @Id
@@ -15,8 +16,8 @@ public class Biglietto {
     private boolean vidimato;
 
     @ManyToOne
-    @JoinColumn(name = "rivenditore_id")
-    private Rivenditore rivenditore;
+    @JoinColumn(name = "vendita_id")
+    private Vendita vendita;
 
 
     @ManyToOne

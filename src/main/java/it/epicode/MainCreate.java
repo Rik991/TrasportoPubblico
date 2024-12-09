@@ -32,7 +32,7 @@ public class MainCreate {
         TesseraDAO tesseraDAO = new TesseraDAO(em);
         AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em);
         BigliettoDAO bigliettoDAO = new BigliettoDAO(em);
-        RivenditoreDAO rivenditoreDAO = new RivenditoreDAO(em);
+        VenditaDAO venditaDAO = new VenditaDAO(em);
 
 
         //creiamo nuove tratte
@@ -117,40 +117,139 @@ public class MainCreate {
         tram2.setTotaleTratteEffettuate(0);
         parcoMezziDAO.save(tram2);
 
+        //creiamo rivenditori
+
+        Rivenditore rivenditore = new Rivenditore();
+        DistributoreAutomatico distributore1 = new DistributoreAutomatico();
+        DistributoreAutomatico distributore2 = new DistributoreAutomatico();
+        venditaDAO.save(rivenditore);
+        venditaDAO.save(distributore1);
+        venditaDAO.save(distributore2);
+
+
+
         //creiamo tessere
+        List<Tessera> tessere = new ArrayList<>();
+
         for (int i = 0; i < 10; i++) {
             Tessera tessera = new Tessera();
             tessera.setNumeroTessera(1000 + i);
             tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
             tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
             tessera.setAttiva(true);
-            tessera.setRuolo(faker.options().option(Ruolo.class));
-            tesseraDAO.save(tessera);
+            tessera.setVendita(rivenditore);
+            tessere.add(tessera);
         }
+        tesseraDAO.saveAllTessere(tessere);
+
+        List<Tessera> tessereDistributore = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Tessera tessera = new Tessera();
+            tessera.setNumeroTessera(2000 + i);
+            tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
+            tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
+            tessera.setAttiva(true);
+            tessera.setVendita(distributore1);
+            tessereDistributore.add(tessera);
+        }
+        tesseraDAO.saveAllTessere(tessereDistributore);
 
         //creiamo biglietti
         List<Biglietto> biglietti = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Biglietto biglietto = new Biglietto();
             biglietto.setVidimato(false);
+            biglietto.setVendita(rivenditore);
             biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
             biglietti.add(biglietto);
         }
         bigliettoDAO.saveAllBiglietti(biglietti);
 
+        List<Biglietto> bigliettiDistributore = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Biglietto biglietto = new Biglietto();
+            biglietto.setVidimato(false);
+            biglietto.setVendita(distributore1);
+            biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+            bigliettiDistributore.add(biglietto);
+        }
+        bigliettoDAO.saveAllBiglietti(bigliettiDistributore);
+
+
 
         //creiamo abbonamenti
         List<Abbonamento> abbonamenti = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Abbonamento abbonamento = new Abbonamento();
+           abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+           abbonamento.setTessera(tessere.get(i));
+           abbonamento.setVendita(rivenditore);
+            abbonamenti.add(abbonamento);
+        }
+        abbonamentoDAO.saveAllAbbonamenti(abbonamenti);
 
-
-
-
-
-
-
+        List<Abbonamento> abbonamentiDistributore = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Abbonamento abbonamento = new Abbonamento();
+            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+            abbonamento.setTessera(tessereDistributore.get(i));
+            abbonamento.setVendita(distributore1);
+            abbonamentiDistributore.add(abbonamento);
+        }
+        abbonamentoDAO.saveAllAbbonamenti(abbonamentiDistributore);
 
 
         //creiamo nuovi user
+
+        User amministratore = new Amministratore();
+        User amministratore1 = new Amministratore();
+        User passeggero = new Passeggero();
+
+        amministratore.setNome("Danilo");
+        amministratore.setCognome("Fumuso");
+        amministratore.setRuolo(Ruolo.AMMINISTRATORE);
+        amministratore.setTessera(tessere.get(0));
+        userDAO.save(amministratore);
+
+        amministratore1.setNome("Tammaro");
+        amministratore1.setCognome("Miele");
+        amministratore1.setRuolo(Ruolo.AMMINISTRATORE);
+        amministratore1.setTessera(tessere.get(2));
+        userDAO.save(amministratore1);
+
+        passeggero.setNome("Riccardo");
+        passeggero.setCognome("Santilli");
+        passeggero.setRuolo(Ruolo.PASSEGGERO);
+        passeggero.setTessera(tessere.get(1));
+        userDAO.save(passeggero);
+
+        for (int i = 0; i < 7; i++) {
+            User user = new Passeggero();
+            user.setNome(faker.name().firstName());
+            user.setCognome(faker.name().lastName());
+            user.setRuolo(Ruolo.PASSEGGERO);
+            user.setTessera(tessere.get(i + 3));
+            userDAO.save(user);
+        }
+
+        rivenditore.setTessere(tessere);
+        rivenditore.setBiglietti(biglietti);
+        rivenditore.setAbbonamenti(abbonamenti);
+        venditaDAO.update(rivenditore);
+
+        distributore1.setInServizio(true);
+        distributore1.setTessere(tessereDistributore);
+        distributore1.setBiglietti(biglietti);
+        distributore1.setAbbonamenti(abbonamenti);
+        venditaDAO.update(distributore1);
+
+
+        distributore2.setInServizio(false); //rotto
+
+
+
+
+
 
 
 

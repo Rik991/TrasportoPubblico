@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "tratte")
 @NamedQuery(name = "Trova_tutto_Tratta", query = "SELECT a FROM Tratta a")
 public class Tratta {
     @Id
