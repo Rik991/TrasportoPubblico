@@ -1,7 +1,6 @@
 package it.epicode.dao;
 
-import it.epicode.entity.Tessera;
-import jakarta.persistence.Entity;
+import it.epicode.entity.biglietteria.Tessera;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
