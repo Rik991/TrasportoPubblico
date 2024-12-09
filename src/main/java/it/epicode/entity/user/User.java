@@ -9,7 +9,7 @@ import lombok.Data;
 @Entity
 @NamedQuery(name = "Trova_tutto_User", query = "SELECT a FROM User a")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class  User {
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +26,4 @@ public abstract class  User {
 
     @OneToOne
     private Tessera tessera;
-
-
 }

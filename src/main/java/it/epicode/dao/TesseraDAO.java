@@ -42,6 +42,4 @@ public class TesseraDAO {
         tessere.forEach(em::persist);
         em.getTransaction().commit();
     }
-
-
 }

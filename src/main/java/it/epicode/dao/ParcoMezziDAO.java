@@ -36,6 +36,4 @@ public class ParcoMezziDAO {
         em.remove(oggetto);
         em.getTransaction().commit();
     }
-
-
 }

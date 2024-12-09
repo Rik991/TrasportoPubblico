@@ -15,8 +15,6 @@ public class Tessera {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     @Column(name = "numero_tessera", nullable = false)
     private int numeroTessera = 1000;
 
@@ -29,13 +27,7 @@ public class Tessera {
     @Column(nullable = false)
     private boolean attiva;
 
-
     @ManyToOne
     @JoinColumn(name = "vendita_id")
     private Vendita vendita;
-
-
-
-
-
 }

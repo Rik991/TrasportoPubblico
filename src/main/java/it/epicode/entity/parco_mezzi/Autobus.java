@@ -10,6 +10,5 @@ import lombok.Data;
 public class Autobus extends ParcoMezzi {
 
 
-    private int capienza = 50; //GESTIRE LA CAPACITA' DELL AUTOBUS
-
+    private int capienza = 50;
 }

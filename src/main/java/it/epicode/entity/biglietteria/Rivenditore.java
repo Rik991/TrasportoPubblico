@@ -12,5 +12,4 @@ import java.util.List;
 @NamedQuery(name = "Trova_tutto_Rivenditore", query = "SELECT a FROM Rivenditore a")
 public class Rivenditore extends Vendita{
 
-
 }

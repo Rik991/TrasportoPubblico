@@ -37,11 +37,9 @@ public class UserDAO {
         em.getTransaction().commit();
     }
 
-
     //lato amministratore
 //    public double calcolaTempoMedioTratta (){ //da implementare
 //        return 0;
 //    }
-
 
 }

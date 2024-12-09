@@ -36,6 +36,4 @@ public class VenditaDAO {
         em.remove(vendita);
         em.getTransaction().commit();
     }
-
-
 }

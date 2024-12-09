@@ -36,6 +36,4 @@ public class TrattaDAO {
         em.remove(oggetto);
         em.getTransaction().commit();
     }
-
-
 }

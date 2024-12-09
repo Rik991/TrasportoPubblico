@@ -45,6 +45,4 @@ public class BigliettoDAO {
         em.getTransaction().commit();
 
     }
-
-
 }

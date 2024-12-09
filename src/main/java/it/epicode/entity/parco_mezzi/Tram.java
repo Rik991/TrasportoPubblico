@@ -9,5 +9,4 @@ import lombok.Data;
 public class Tram extends ParcoMezzi {
 
     private int capienza = 200;
-
 }

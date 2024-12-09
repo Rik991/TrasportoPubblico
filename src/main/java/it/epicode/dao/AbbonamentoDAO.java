@@ -44,6 +44,4 @@ public class AbbonamentoDAO {
         }
         em.getTransaction().commit();
     }
-
-
 }

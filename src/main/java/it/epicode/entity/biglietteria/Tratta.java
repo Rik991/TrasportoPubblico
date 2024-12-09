@@ -37,5 +37,4 @@ public class Tratta {
 
     @OneToMany(mappedBy = "tratta")
     private List<Abbonamento> abbonamenti;
-
 }

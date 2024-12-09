@@ -10,12 +10,8 @@ import lombok.Data;
 @NamedQuery(name = "Trova_tutto_DistributoreAutomatico", query = "SELECT a FROM DistributoreAutomatico a")
 public class DistributoreAutomatico extends Vendita {
 
-
     @Column(name = "in_servizio", nullable = false)
     private boolean inServizio;
-
-
-
 
 //    @Override
 //    public void emettiBiglietto() {

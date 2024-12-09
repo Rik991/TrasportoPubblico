@@ -12,7 +12,6 @@ public class Abbonamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "vendita_id")
     private Vendita vendita;
@@ -23,5 +22,4 @@ public class Abbonamento {
 
     @OneToOne
     private Tessera tessera;
-
 }
