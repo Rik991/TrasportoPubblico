@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,24 +23,18 @@ public class Tratta {
     private String zonaArrivo;
 
     @Column(name = "ora_di_partenza", nullable = false)
-    private LocalDateTime oraDiPartenza;
+    private LocalTime oraDiPartenza;
 
     @Column(name = "ora_di_arrivo", nullable = false)
-    private LocalDateTime oraDiArrivo;
-    //LocalDateTime partenzaDateTime = partenza;
-    //LocalDateTime arrivoDateTime = arrivo;
-    //Duration durata = Duration.between(partenzaDateTime, arrivoDateTime);
-    //this.durata = durata.toMillis();
-    //In questo modo, la durata della tratta sarà memorizzata in millisecondi, il che consente un calcolo preciso e semplifica la logica di programmazione.
-    //Quando è necessario visualizzare la durata di una tratta in un formato leggibile per gli utenti (ad esempio, ore e minuti), è possibile utilizzare una semplice conversione:
-    //javaCopylong durataMillis = tratta.getDurata();
-    //long ore = durataMillis / (1000 * 60 * 60);
-    //long minuti = (durataMillis % (1000 * 60 * 60)) / (1000 * 60);
+    private LocalTime oraDiArrivo;
 
     @Column(name = "durata_effettiva")
-    private double durataEffettiva;
+    private LocalTime durataEffettiva;
 
+    @OneToMany(mappedBy = "tratta")
+    private List<Biglietto> biglietti;
 
-
+    @OneToMany(mappedBy = "tratta")
+    private List<Abbonamento> abbonamenti;
 
 }

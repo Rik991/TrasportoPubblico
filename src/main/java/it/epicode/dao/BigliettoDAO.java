@@ -37,5 +37,14 @@ public class BigliettoDAO {
         em.getTransaction().commit();
     }
 
+    public void saveAllBiglietti(List<Biglietto> biglietti) {
+        em.getTransaction().begin();
+        for (Biglietto biglietto : biglietti) {
+            em.persist(biglietto);
+        }
+        em.getTransaction().commit();
+
+    }
+
 
 }

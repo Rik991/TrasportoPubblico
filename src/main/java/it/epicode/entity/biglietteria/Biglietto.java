@@ -19,8 +19,8 @@ public class Biglietto {
     private Rivenditore rivenditore;
 
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "tratta_id")
     private Tratta tratta;
-
 
 }

@@ -4,6 +4,8 @@ import it.epicode.entity.biglietteria.Tratta;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalTime;
+
 @Data
 @Entity
 @NamedQuery(name = "Trova_tutto_ParcoMezzi", query = "SELECT a FROM ParcoMezzi a")
@@ -14,23 +16,22 @@ public abstract class ParcoMezzi {
     private Long id;
 
     @Column(nullable = false)
-    private boolean stato; //in servizio o in manutenzione?
+    private boolean inServizio; //in servizio o in manutenzione?
 
     @OneToOne
     private Tratta tratta;
 
     @Column(name = "tempo_in_servizio", nullable = false)
-    private double tempoInServizio;
+    private LocalTime tempoInServizio;
 
     @Column(name = "tempo_in_manutenzione", nullable = false)
-    private double tempoInManutenzione;
+    private LocalTime tempoInManutenzione;
 
     @Column(name = "numero_biglietti_vidimati", nullable = false)
-    private int numeroBigliettiVidimati;
+    private int numeroBigliettiVidimati = 0;
 
     @Column(name = "totale_tratte_effettuate", nullable = false)
-    private int totaleTratteEffettuate;
-
+    private int totaleTratteEffettuate = 0;
 
 
 }

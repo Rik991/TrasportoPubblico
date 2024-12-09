@@ -16,7 +16,8 @@ public class Abbonamento {
     @JoinColumn(name = "rivenditore_id")
     private Rivenditore rivenditore;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "tratta_id")
     private Tratta tratta;
 
 
