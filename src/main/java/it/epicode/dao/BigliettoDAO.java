@@ -1,6 +1,6 @@
 package it.epicode.dao;
 
-import it.epicode.entity.biglietteria.Tessera;
+import it.epicode.entity.biglietteria.Biglietto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -8,30 +8,30 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-public class TesseraDAO {
+public class BigliettoDAO {
     private EntityManager em;
 
-    public void save(Tessera oggetto) {
+    public void save(Biglietto oggetto) {
         em.getTransaction().begin();
         em.persist(oggetto);
         em.getTransaction().commit();
-    } 
-
-    public Tessera findById(Long id) {
-        return em.find(Tessera.class, id);
-    }
-    
-    public List<Tessera> findAll() {
-        return em.createNamedQuery("Trova_tutto_Tessera", Tessera.class).getResultList();
     }
 
-    public void update(Tessera oggetto) {
+    public Biglietto findById(Long id) {
+        return em.find(Biglietto.class, id);
+    }
+
+    public List<Biglietto> findAll() {
+        return em.createNamedQuery("Trova_tutto_Biglietto", Biglietto.class).getResultList();
+    }
+
+    public void update(Biglietto oggetto) {
         em.getTransaction().begin();
         em.merge(oggetto);
         em.getTransaction().commit();
     }
 
-    public void delete(Tessera oggetto) {
+    public void delete(Biglietto oggetto) {
         em.getTransaction().begin();
         em.remove(oggetto);
         em.getTransaction().commit();
