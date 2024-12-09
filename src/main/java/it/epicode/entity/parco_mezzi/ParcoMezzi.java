@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @Entity
 @NamedQuery(name = "Trova_tutto_ParcoMezzi", query = "SELECT a FROM ParcoMezzi a")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class ParcoMezzi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
