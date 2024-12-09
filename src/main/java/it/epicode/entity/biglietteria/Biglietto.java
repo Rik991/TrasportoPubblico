@@ -19,6 +19,8 @@ public class Biglietto {
     private Rivenditore rivenditore;
 
 
+    @OneToOne
+    private Tratta tratta;
 
 
 }

@@ -38,11 +38,7 @@ public class Tratta {
     @Column(name = "durata_effettiva")
     private double durataEffettiva;
 
-    @OneToOne
-    private Biglietto biglietto;
 
-    @OneToOne
-    private Abbonamento abbonamento;
 
 
 }
