@@ -38,4 +38,10 @@ public class UserDAO {
     }
 
 
+    //lato amministratore
+//    public double calcolaTempoMedioTratta (){ //da implementare
+//        return 0;
+//    }
+
+
 }

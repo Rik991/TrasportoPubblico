@@ -25,8 +25,4 @@ public class Rivenditore {
 
 
 
-//    public void emettiBiglietto(){}//implementare
-//
-//    public void emettiAbbonamento(){}//implementare
-
 }

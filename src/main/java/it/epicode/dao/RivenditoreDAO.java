@@ -37,5 +37,9 @@ public class RivenditoreDAO {
         em.getTransaction().commit();
     }
 
+    //    public void emettiBiglietto(){}//implementare
+//
+//    public void emettiAbbonamento(){}//implementare
+
 
 }
