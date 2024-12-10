@@ -222,7 +222,7 @@ public class MainCreate {
             tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
             tessera.setAttiva(true);
             tessera.setVendita(distributore1);
-//            tessera.setUser(passeggeri.get(i));
+            tessera.setUser(passeggeri.get(i));
             tessereDistributore.add(tessera);
         }
         tesseraDAO.saveAllTessere(tessereDistributore);
@@ -251,7 +251,7 @@ public class MainCreate {
 
         //creiamo abbonamenti
         List<Abbonamento> abbonamenti = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 6; i++) {
             Abbonamento abbonamento = new Abbonamento();
             abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
             abbonamento.setTessera(tessere.get(i));
@@ -266,7 +266,7 @@ public class MainCreate {
         abbonamentoDAO.saveAllAbbonamenti(abbonamenti);
 
         List<Abbonamento> abbonamentiDistributore = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 4; i++) {
             Abbonamento abbonamento = new Abbonamento();
             abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
             abbonamento.setTessera(tessereDistributore.get(i));
