@@ -30,4 +30,7 @@ public class Tessera {
     @ManyToOne
     @JoinColumn(name = "vendita_id")
     private Vendita vendita;
+
+    @OneToOne
+    private User user;
 }

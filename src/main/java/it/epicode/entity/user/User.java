@@ -24,6 +24,5 @@ public abstract class User {
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
-    @OneToOne
-    private Tessera tessera;
+
 }

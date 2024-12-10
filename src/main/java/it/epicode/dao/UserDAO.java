@@ -1,5 +1,6 @@
 package it.epicode.dao;
 
+import it.epicode.entity.biglietteria.Tessera;
 import it.epicode.entity.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
@@ -34,6 +35,12 @@ public class UserDAO {
     public void delete(User oggetto) {
         em.getTransaction().begin();
         em.remove(oggetto);
+        em.getTransaction().commit();
+    }
+
+    public void saveAllUtenti(List<User> users) {
+        em.getTransaction().begin();
+        users.forEach(em::persist);
         em.getTransaction().commit();
     }
 

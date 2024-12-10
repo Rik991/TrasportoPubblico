@@ -126,28 +126,100 @@ public class MainCreate {
         venditaDAO.save(distributore2);
 
 
+        //creiamo nuovi user
+
+        User amministratore = new Amministratore();
+        User amministratore1 = new Amministratore();
+        User passeggero = new Passeggero();
+
+        amministratore.setNome("Danilo");
+        amministratore.setCognome("Fumuso");
+        amministratore.setRuolo(Ruolo.AMMINISTRATORE);
+
+        userDAO.save(amministratore);
+
+        amministratore1.setNome("Tammaro");
+        amministratore1.setCognome("Miele");
+        amministratore1.setRuolo(Ruolo.AMMINISTRATORE);
+
+        userDAO.save(amministratore1);
+
+        passeggero.setNome("Riccardo");
+        passeggero.setCognome("Santilli");
+        passeggero.setRuolo(Ruolo.PASSEGGERO);
+
+        userDAO.save(passeggero);
+
+        List<User> passeggeri = new ArrayList<>();
+
+        for (int i = 0; i < 15; i++) {
+            User user = new Passeggero();
+            user.setNome(faker.name().firstName());
+            user.setCognome(faker.name().lastName());
+            user.setRuolo(Ruolo.PASSEGGERO);
+
+            passeggeri.add(user);
+        }
+
+        userDAO.saveAllUtenti(passeggeri);
+
+
         //creiamo tessere
         List<Tessera> tessere = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        Tessera tessera1 = new Tessera();
+        tessera1.setNumeroTessera(1000 + 1);
+        tessera1.setDataEmissione(LocalDate.now());//sistemare date per scadenza
+        tessera1.setDataScadenza(tessera1.getDataEmissione().plusYears(1));
+        tessera1.setAttiva(true);
+        tessera1.setUser(amministratore);
+        tessera1.setVendita(rivenditore);
+
+        tessere.add(tessera1);
+
+
+        Tessera tessera2 = new Tessera();
+        tessera2.setNumeroTessera(1000 + 2);
+        tessera2.setDataEmissione(LocalDate.now());//sistemare date per scadenza
+        tessera2.setDataScadenza(tessera2.getDataEmissione().plusYears(1));
+        tessera2.setAttiva(true);
+        tessera2.setUser(amministratore1);
+        tessera2.setVendita(rivenditore);
+
+        tessere.add(tessera2);
+
+        Tessera tessera3 = new Tessera();
+        tessera3.setNumeroTessera(1000 + 3);
+        tessera3.setDataEmissione(LocalDate.now());//sistemare date per scadenza
+        tessera3.setDataScadenza(tessera3.getDataEmissione().plusYears(1));
+        tessera3.setAttiva(true);
+        tessera3.setUser(passeggero);
+        tessera3.setVendita(rivenditore);
+
+        tessere.add(tessera3);
+
+
+        for (int i = 0; i < 3; i++) {
             Tessera tessera = new Tessera();
-            tessera.setNumeroTessera(1000 + i);
+            tessera.setNumeroTessera(1004 + i);
             tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
             tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
             tessera.setAttiva(true);
             tessera.setVendita(rivenditore);
+            tessera.setUser(passeggeri.get(i));
             tessere.add(tessera);
         }
         tesseraDAO.saveAllTessere(tessere);
 
         List<Tessera> tessereDistributore = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 3; i < 7; i++) {
             Tessera tessera = new Tessera();
             tessera.setNumeroTessera(2000 + i);
             tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
             tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
             tessera.setAttiva(true);
             tessera.setVendita(distributore1);
+//            tessera.setUser(passeggeri.get(i));
             tessereDistributore.add(tessera);
         }
         tesseraDAO.saveAllTessere(tessereDistributore);
@@ -206,39 +278,6 @@ public class MainCreate {
         }
         abbonamentoDAO.saveAllAbbonamenti(abbonamentiDistributore);
 
-
-        //creiamo nuovi user
-
-        User amministratore = new Amministratore();
-        User amministratore1 = new Amministratore();
-        User passeggero = new Passeggero();
-
-        amministratore.setNome("Danilo");
-        amministratore.setCognome("Fumuso");
-        amministratore.setRuolo(Ruolo.AMMINISTRATORE);
-        amministratore.setTessera(tessere.get(0));
-        userDAO.save(amministratore);
-
-        amministratore1.setNome("Tammaro");
-        amministratore1.setCognome("Miele");
-        amministratore1.setRuolo(Ruolo.AMMINISTRATORE);
-        amministratore1.setTessera(tessere.get(2));
-        userDAO.save(amministratore1);
-
-        passeggero.setNome("Riccardo");
-        passeggero.setCognome("Santilli");
-        passeggero.setRuolo(Ruolo.PASSEGGERO);
-        passeggero.setTessera(tessere.get(1));
-        userDAO.save(passeggero);
-
-        for (int i = 0; i < 7; i++) {
-            User user = new Passeggero();
-            user.setNome(faker.name().firstName());
-            user.setCognome(faker.name().lastName());
-            user.setRuolo(Ruolo.PASSEGGERO);
-            user.setTessera(tessere.get(i + 3));
-            userDAO.save(user);
-        }
 
         rivenditore.setTessere(tessere);
         rivenditore.setBiglietti(biglietti);
