@@ -71,6 +71,8 @@ public class MainCreate {
         tratta4.setDurataEffettiva(LocalTime.of(1, 30));
         trattaDAO.save(tratta4);
 
+
+
         List<Tratta> tratte = new ArrayList<>();
         tratte.add(tratta1);
         tratte.add(tratta2);

@@ -23,7 +23,7 @@ public class MainUser {
     public static VenditaDAO venditaDAO = new VenditaDAO(em);
     public static Scanner scanner = new Scanner(System.in);
 
-    public static Vendita findVenditore(int numero) {
+    public static Vendita chooseVenditore(int numero) {
         Vendita venditore = null;
 
         if (numero == 1) {
@@ -63,10 +63,37 @@ public class MainUser {
 
         return venditore;
     }
+    public static Tratta chooseTratta (int numero){
+        Tratta tratta = null;
+        List<Tratta> tratte = trattaDAO.findAll();
+        if (numero >= 0 && numero < tratte.size()) {
+            tratta = tratte.get(numero);
+        } else {
+            System.out.println("Tratta non presente nella lista!");
+        }
+        return tratta;
+    }
 
     public static void main(String[] args) {
 
-        System.out.println("Salve, 1- per comprare un biglietto, 2- per comprare un abbonamento (tessera necessaria!)");
+        System.out.println("Salve, dove vuoi andare?");
+        List<Tratta> tratte = trattaDAO.findAll();
+        System.out.println("Seleziona la tratta:");
+        for (int i = 0; i < tratte.size(); i++) {
+            System.out.println((i + 1) + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
+        }
+        int trattaScelta = scanner.nextInt() - 1;
+        scanner.nextLine();
+        if (trattaScelta >= 0 && trattaScelta < tratte.size()) {
+            System.out.println("Perfetto! Pronto a partire da " + tratte.get(trattaScelta).getZonaPartenza() + " a " + tratte.get(trattaScelta).getZonaArrivo());
+            System.out.println("il viaggio durerà circa " + tratte.get(trattaScelta).getDurataEffettiva() + " minuti");
+        } else {
+            System.out.println("Tratta non presente nella lista!");
+        }
+
+
+
+        System.out.println(" 1- per comprare un biglietto, 2- per comprare un abbonamento (tessera richiesta!)");
         int titoloDiViaggio = scanner.nextInt();
         scanner.nextLine();
 
@@ -75,9 +102,10 @@ public class MainUser {
                 System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                 int acquisto = scanner.nextInt();
                 scanner.nextLine();
-                Vendita venditore = findVenditore(acquisto);
+                Vendita venditore = chooseVenditore(acquisto);
+                Tratta tratta = chooseTratta(trattaScelta);
                 if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
-                    bigliettoDAO.emettiBiglietto(venditore, trattaDAO.findById(1L));
+                    bigliettoDAO.emettiBiglietto(venditore, tratta);
                 }
                 break;
 
@@ -109,12 +137,14 @@ public class MainUser {
                         System.out.println("Dove vuoi acquistare la tessera? 1 per rivenditore, 2 per distributore");
                         int acquistoTessera = scanner.nextInt();
                         scanner.nextLine();
-                        findVenditore(acquistoTessera);
+                        chooseVenditore(acquistoTessera);
                 }
 
 //                        tesseraDAO.emettiTessera(venditaDAO.findById(), userDAO.findById(userId));
 
                 break;
+            default:
+                System.out.println("Scegliere 1 o 2 per acquistare il prodotto desiderato!");
 
         }
 
