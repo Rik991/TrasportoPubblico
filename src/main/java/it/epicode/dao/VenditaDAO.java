@@ -1,7 +1,6 @@
 package it.epicode.dao;
 
 import it.epicode.entity.biglietteria.Vendita;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
@@ -38,11 +37,9 @@ public class VenditaDAO {
     }
 
 
-    public void emettiBiglietto(){}
-
     //mensili nominativi per utenti con tessera
-    public void emettiAbbonamento(){}
-
+    public void emettiAbbonamento() {
+    }
 
 
 }

@@ -1,6 +1,8 @@
 package it.epicode.dao;
 
 import it.epicode.entity.biglietteria.Biglietto;
+import it.epicode.entity.biglietteria.Tratta;
+import it.epicode.entity.biglietteria.Vendita;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -45,4 +47,15 @@ public class BigliettoDAO {
         em.getTransaction().commit();
 
     }
+
+    public void emettiBiglietto(Vendita vendita, Tratta tratta) {
+        em.getTransaction().begin();
+        Biglietto biglietto = new Biglietto();
+        biglietto.setVidimato(false);
+        biglietto.setVendita(vendita);
+        biglietto.setTratta(tratta);
+        em.persist(biglietto);
+        em.getTransaction().commit();
+    }
+
 }
