@@ -108,6 +108,9 @@ public class MainCreate {
         tram1.setTotaleTratteEffettuate(20);
         parcoMezziDAO.save(tram1);
 
+
+
+
         tram2.setInServizio(false); //in manutenzione
         tram2.setTratta(tratta4);
         tram2.setTempoInServizio(LocalTime.of(0, 0));
