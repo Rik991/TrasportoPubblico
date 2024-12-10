@@ -16,7 +16,7 @@ public class Tessera {
     private Long id;
 
     @Column(name = "numero_tessera", nullable = false)
-    private int numeroTessera = 1000;
+    private Long numeroTessera = 1000L;
 
     @Column(name = "data_emissione", nullable = false)
     private LocalDate dataEmissione;

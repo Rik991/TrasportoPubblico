@@ -1,102 +1,163 @@
 package it.epicode;
 
-import com.github.javafaker.Faker;
 import it.epicode.dao.*;
-import it.epicode.entity.biglietteria.Biglietto;
-import it.epicode.entity.biglietteria.DistributoreAutomatico;
-import it.epicode.entity.biglietteria.Vendita;
+import it.epicode.entity.biglietteria.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class MainUser {
 
+    public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("unit-jpa");
+    public static EntityManager em = emf.createEntityManager();
+
+    public static TrattaDAO trattaDAO = new TrattaDAO(em);
+    public static ParcoMezziDAO parcoMezziDAO = new ParcoMezziDAO(em);
+    public static UserDAO userDAO = new UserDAO(em);
+    public static TesseraDAO tesseraDAO = new TesseraDAO(em);
+    public static AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em);
+    public static BigliettoDAO bigliettoDAO = new BigliettoDAO(em);
+    public static VenditaDAO venditaDAO = new VenditaDAO(em);
+    public static Scanner scanner = new Scanner(System.in);
+
+    public static Vendita findVenditore(int numero) {
+        Vendita venditore = null;
+
+        if (numero == 1) {
+            List<Rivenditore> rivenditori = venditaDAO.findAllRivenditori();
+            System.out.println("Seleziona il Rivenditore:");
+            for (int i = 0; i < rivenditori.size(); i++) {
+                System.out.println((i + 1) + ". Rivenditore " + rivenditori.get(i).getId());
+            }
+            int rivenditoreScelto = scanner.nextInt() - 1;
+            scanner.nextLine();
+            if (rivenditoreScelto >= 0 && rivenditoreScelto < rivenditori.size()) {
+                venditore = rivenditori.get(rivenditoreScelto);
+            } else {
+                System.out.println("Rivenditore non presente nella lista!");
+            }
+        } else if (numero == 2) {
+            List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributori();
+            System.out.println("Seleziona il distributore:");
+            for (int i = 0; i < distributori.size(); i++) {
+                System.out.println((i + 1) + ". Distributore " + (distributori.get(i).getId() - 1));
+            }
+            int distributoreScelto = scanner.nextInt() - 1;
+            scanner.nextLine();
+            if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
+                if (distributori.get(distributoreScelto).isInServizio()) {
+                    venditore = distributori.get(distributoreScelto);
+                } else {
+                    System.out.println("Il distributore non è in servizio");
+                }
+
+            } else {
+                System.out.println("Distributore non presente nella lista!");
+            }
+        } else {
+            System.out.println("Scegliere 1 o 2 per acquistare dalla lista dei venditori!");
+        }
+
+        return venditore;
+    }
 
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("unit-jpa");
-        EntityManager em = emf.createEntityManager();
 
-        TrattaDAO trattaDAO = new TrattaDAO(em);
-        ParcoMezziDAO parcoMezziDAO = new ParcoMezziDAO(em);
-        UserDAO userDAO = new UserDAO(em);
-        TesseraDAO tesseraDAO = new TesseraDAO(em);
-        AbbonamentoDAO abbonamentoDAO = new AbbonamentoDAO(em);
-        BigliettoDAO bigliettoDAO = new BigliettoDAO(em);
-        VenditaDAO venditaDAO = new VenditaDAO(em);
-
-
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("1 per acquistare biglietto, 2 per acquistare abbonamento");
-        int scelta = scanner.nextInt();
+        System.out.println("Salve, 1- per comprare un biglietto, 2- per comprare un abbonamento (tessera necessaria!)");
+        int titoloDiViaggio = scanner.nextInt();
         scanner.nextLine();
 
-        switch (scelta) {
+        switch (titoloDiViaggio) {
             case 1: //vendita biglietti
                 System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                 int acquisto = scanner.nextInt();
                 scanner.nextLine();
-                if (acquisto == 1) {
-                    bigliettoDAO.emettiBiglietto(venditaDAO.findById(1L), trattaDAO.findById(1L));
-                } else {
-                    List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributors();
-                    System.out.println("Seleziona il distributore:");
-                    for (int i = 0; i < distributori.size(); i++) {
-                        System.out.println((i + 2) + ". Distributore " + distributori.get(i).getId());
-                    }
-                    int distributoreScelto = scanner.nextInt() - 2;
-                    scanner.nextLine();
-                    if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
-                        DistributoreAutomatico distributore = distributori.get(distributoreScelto);
-                        if (distributore.isInServizio()) {
-                            bigliettoDAO.emettiBiglietto(distributore, trattaDAO.findById(1L));
-                        } else {
-                            System.out.println("Distributore fuori servizio!");
-                        }
-                    } else {
-                        System.out.println("Selezione non valida!");
-                    }
+                Vendita venditore = findVenditore(acquisto);
+                if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
+                    bigliettoDAO.emettiBiglietto(venditore, trattaDAO.findById(1L));
                 }
                 break;
-            case 2:  //vendita abbonamenti
-                System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
-                int acquistoAbbonamento = scanner.nextInt();
-                System.out.println("1. Settimanale - 2. Mensile");
-                int tipoabbonamento = scanner.nextInt();
-                scanner.nextLine();
-                if (acquistoAbbonamento == 1) {
-                    abbonamentoDAO.emettiAbbonamento(venditaDAO.findById(1L), trattaDAO.findById(1L), tesseraDAO.findById(11L), tipoabbonamento);
-                } else {
-                    List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributors();
-                    System.out.println("Seleziona il distributore:");
-                    for (int i = 0; i < distributori.size(); i++) {
-                        System.out.println((i + 2) + ". Distributore " + distributori.get(i).getId());
-                    }
-                    int distributoreScelto = scanner.nextInt() - 2;
-                    scanner.nextLine();
-                    if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
-                        DistributoreAutomatico distributore = distributori.get(distributoreScelto);
-                        if (distributore.isInServizio()) {
-                            abbonamentoDAO.emettiAbbonamento(distributore, trattaDAO.findById(1L), tesseraDAO.findById(12L), tipoabbonamento);
+
+            case 2:
+                System.out.println("Hai una tessera? Rispondi si o no");
+                String scelta = scanner.nextLine().toLowerCase();
+
+                switch (scelta) {
+                    case "si":
+                        System.out.println("Salve, inserire numero di tessera!");
+                        int numeroTessera = scanner.nextInt();
+                        scanner.nextLine();
+                        Tessera tessera = tesseraDAO.findUserByNumeroTessera(numeroTessera);
+                        if (tesseraDAO.checkRuolo(tessera)) {
+
+                            // CODICE PER AMMINISTRATORE
+
                         } else {
-                            System.out.println("Distributore fuori servizio!");
+
+                            // CODICE PER PASSEGGERO CON TESSERA
                         }
-                    } else {
-                        System.out.println("Selezione non valida!");
-                    }
+                        break;
+
+                    case "no":
+                        System.out.println("Inserisci il tuo userID");
+                        Long userId = scanner.nextLong();
+                        scanner.nextLine();
+
+                        System.out.println("Dove vuoi acquistare la tessera? 1 per rivenditore, 2 per distributore");
+                        int acquistoTessera = scanner.nextInt();
+                        scanner.nextLine();
+                        findVenditore(acquistoTessera);
                 }
 
+//                        tesseraDAO.emettiTessera(venditaDAO.findById(), userDAO.findById(userId));
+
                 break;
-            default:
-                System.out.println("Scelta non valida!");
-                break;
+
         }
 
 
-
     }
+
+
+    //Menu
+
+//        System.out.println("1 per acquistare biglietto, 2 per acquistare abbonamento");
+//    int scelta = scanner.nextInt();
+//        scanner.nextLine();
+
+
+//           //vendita abbonamenti
+//                System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
+//                int acquisto2Abbonamento = scanner.nextInt();
+//                System.out.println("1. Settimanale - 2. Mensile");
+//                int tipoabbonamento = scanner.nextInt();
+//                scanner.nextLine();
+//                if (acquistoAbbonamento == 1) {
+//                    abbonamentoDAO.emettiAbbonamento(venditaDAO.findById(1L), trattaDAO.findById(1L), tesseraDAO.findById(11L), tipoabbonamento);
+//                } else {
+//                    List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributors();
+//                    System.out.println("Seleziona il distributore:");
+//                    for (int i = 0; i < distributori.size(); i++) {
+//                        System.out.println((i + 2) + ". Distributore " + distributori.get(i).getId());
+//                    }
+//                    int distributoreScelto = scanner.nextInt() - 2;
+//                    scanner.nextLine();
+//                    if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
+//                        DistributoreAutomatico distributore = distributori.get(distributoreScelto);
+//                        if (distributore.isInServizio()) {
+//                            abbonamentoDAO.emettiAbbonamento(distributore, trattaDAO.findById(1L), tesseraDAO.findById(12L), tipoabbonamento);
+//                        } else {
+//                            System.out.println("Distributore fuori servizio!");
+//                        }
+//                    } else {
+//                        System.out.println("Selezione non valida!");
+//                    }
+//                }
+
+
 }
+
+

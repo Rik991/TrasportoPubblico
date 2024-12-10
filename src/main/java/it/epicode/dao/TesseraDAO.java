@@ -1,10 +1,15 @@
 package it.epicode.dao;
 
+import it.epicode.entity.biglietteria.Ruolo;
 import it.epicode.entity.biglietteria.Tessera;
-import jakarta.persistence.Entity;
+
+import it.epicode.entity.biglietteria.Vendita;
+import it.epicode.entity.user.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,12 +20,12 @@ public class TesseraDAO {
         em.getTransaction().begin();
         em.persist(oggetto);
         em.getTransaction().commit();
-    } 
+    }
 
     public Tessera findById(Long id) {
         return em.find(Tessera.class, id);
     }
-    
+
     public List<Tessera> findAll() {
         return em.createNamedQuery("Trova_tutto_Tessera", Tessera.class).getResultList();
     }
@@ -42,4 +47,28 @@ public class TesseraDAO {
         tessere.forEach(em::persist);
         em.getTransaction().commit();
     }
+
+    public Tessera findUserByNumeroTessera(int numeroTessera){
+       TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t WHERE t.numeroTessera = :numeroTessera", Tessera.class);
+           query.setParameter("numeroTessera", numeroTessera);
+           return (Tessera) query.getResultList();
+    }
+
+    public boolean checkRuolo(Tessera tessera) {
+        return tessera.getUser().getRuolo().equals(Ruolo.AMMINISTRATORE);
+    }
+
+    public void emettiTessera(Vendita vendita, User user){
+        em.getTransaction().begin();
+        Tessera nuovaTessera = new Tessera();
+        nuovaTessera.setNumeroTessera(4000 + user.getId());
+        nuovaTessera.setDataEmissione(LocalDate.now());
+        nuovaTessera.setDataScadenza(nuovaTessera.getDataEmissione().plusYears(1));
+        nuovaTessera.setAttiva(true);
+        nuovaTessera.setVendita(vendita);
+        nuovaTessera.setUser(user);
+        em.persist(nuovaTessera);
+        em.getTransaction().commit();
+    }
+
 }

@@ -171,7 +171,7 @@ public class MainCreate {
         List<Tessera> tessere = new ArrayList<>();
 
         Tessera tessera1 = new Tessera();
-        tessera1.setNumeroTessera(1000 + 1);
+        tessera1.setNumeroTessera(1001L);
         tessera1.setDataEmissione(LocalDate.now());//sistemare date per scadenza
         tessera1.setDataScadenza(tessera1.getDataEmissione().plusYears(1));
         tessera1.setAttiva(true);
@@ -182,7 +182,7 @@ public class MainCreate {
 
 
         Tessera tessera2 = new Tessera();
-        tessera2.setNumeroTessera(1000 + 2);
+        tessera2.setNumeroTessera(1002L);
         tessera2.setDataEmissione(LocalDate.now());//sistemare date per scadenza
         tessera2.setDataScadenza(tessera2.getDataEmissione().plusYears(1));
         tessera2.setAttiva(true);
@@ -192,7 +192,7 @@ public class MainCreate {
         tessere.add(tessera2);
 
         Tessera tessera3 = new Tessera();
-        tessera3.setNumeroTessera(1000 + 3);
+        tessera3.setNumeroTessera(1003L);
         tessera3.setDataEmissione(LocalDate.now());//sistemare date per scadenza
         tessera3.setDataScadenza(tessera3.getDataEmissione().plusYears(1));
         tessera3.setAttiva(true);
@@ -204,7 +204,7 @@ public class MainCreate {
 
         for (int i = 0; i < 3; i++) {
             Tessera tessera = new Tessera();
-            tessera.setNumeroTessera(1004 + i);
+            tessera.setNumeroTessera(1004L + i);
             tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
             tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
             tessera.setAttiva(true);
@@ -217,7 +217,7 @@ public class MainCreate {
         List<Tessera> tessereDistributore = new ArrayList<>();
         for (int i = 3; i < 7; i++) {
             Tessera tessera = new Tessera();
-            tessera.setNumeroTessera(2000 + i);
+            tessera.setNumeroTessera(2000L + i);
             tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
             tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
             tessera.setAttiva(true);
@@ -229,7 +229,7 @@ public class MainCreate {
 
         //tessere senza abbonamento
         Tessera tessera4 = new Tessera();
-        tessera4.setNumeroTessera(3001);
+        tessera4.setNumeroTessera(3001L);
         tessera4.setDataEmissione(LocalDate.now());
         tessera4.setDataScadenza(tessera4.getDataEmissione().plusYears(1));
         tessera4.setAttiva(true);
@@ -239,7 +239,7 @@ public class MainCreate {
 
 
         Tessera tessera5 = new Tessera();
-        tessera5.setNumeroTessera(3002);
+        tessera5.setNumeroTessera(3002L);
         tessera5.setDataEmissione(LocalDate.now());
         tessera5.setDataScadenza(tessera5.getDataEmissione().plusYears(1));
         tessera5.setAttiva(true);

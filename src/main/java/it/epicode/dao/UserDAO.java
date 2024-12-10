@@ -1,5 +1,6 @@
 package it.epicode.dao;
 
+import it.epicode.entity.biglietteria.Ruolo;
 import it.epicode.entity.biglietteria.Tessera;
 import it.epicode.entity.user.User;
 import jakarta.persistence.Entity;
@@ -43,6 +44,11 @@ public class UserDAO {
         users.forEach(em::persist);
         em.getTransaction().commit();
     }
+
+//    public boolean checkRuolo(User user) {
+//        return user.getRuolo().equals(Ruolo.PASSEGGERO);
+//    }
+
 
     //lato amministratore
 //    public double calcolaTempoMedioTratta (){ //da implementare
