@@ -63,6 +63,32 @@ public class MainUser {
                 }
                 break;
             case 2:  //vendita abbonamenti
+                System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
+                int acquistoAbbonamento = scanner.nextInt();
+                System.out.println("1. Settimanale - 2. Mensile");
+                int tipoabbonamento = scanner.nextInt();
+                scanner.nextLine();
+                if (acquistoAbbonamento == 1) {
+                    abbonamentoDAO.emettiAbbonamento(venditaDAO.findById(1L), trattaDAO.findById(1L), tesseraDAO.findById(11L), tipoabbonamento);
+                } else {
+                    List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributors();
+                    System.out.println("Seleziona il distributore:");
+                    for (int i = 0; i < distributori.size(); i++) {
+                        System.out.println((i + 2) + ". Distributore " + distributori.get(i).getId());
+                    }
+                    int distributoreScelto = scanner.nextInt() - 2;
+                    scanner.nextLine();
+                    if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
+                        DistributoreAutomatico distributore = distributori.get(distributoreScelto);
+                        if (distributore.isInServizio()) {
+                            abbonamentoDAO.emettiAbbonamento(distributore, trattaDAO.findById(1L), tesseraDAO.findById(12L), tipoabbonamento);
+                        } else {
+                            System.out.println("Distributore fuori servizio!");
+                        }
+                    } else {
+                        System.out.println("Selezione non valida!");
+                    }
+                }
 
                 break;
             default:

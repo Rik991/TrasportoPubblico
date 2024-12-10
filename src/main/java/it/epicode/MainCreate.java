@@ -227,6 +227,27 @@ public class MainCreate {
         }
         tesseraDAO.saveAllTessere(tessereDistributore);
 
+        //tessere senza abbonamento
+        Tessera tessera4 = new Tessera();
+        tessera4.setNumeroTessera(3001);
+        tessera4.setDataEmissione(LocalDate.now());
+        tessera4.setDataScadenza(tessera4.getDataEmissione().plusYears(1));
+        tessera4.setAttiva(true);
+        tessera4.setVendita(rivenditore);
+        tessera4.setUser(passeggeri.get(11));
+        tesseraDAO.save(tessera4);
+
+
+        Tessera tessera5 = new Tessera();
+        tessera5.setNumeroTessera(3002);
+        tessera5.setDataEmissione(LocalDate.now());
+        tessera5.setDataScadenza(tessera5.getDataEmissione().plusYears(1));
+        tessera5.setAttiva(true);
+        tessera5.setVendita(distributore1);
+        tessera5.setUser(passeggeri.get(12));
+        tesseraDAO.save(tessera5);
+
+
         //creiamo biglietti
         List<Biglietto> biglietti = new ArrayList<>();
         for (int i = 0; i < 10; i++) {

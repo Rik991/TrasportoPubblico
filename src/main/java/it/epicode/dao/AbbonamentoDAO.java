@@ -1,10 +1,10 @@
 package it.epicode.dao;
 
-import it.epicode.entity.biglietteria.Abbonamento;
-import jakarta.persistence.Entity;
+import it.epicode.entity.biglietteria.*;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -43,5 +43,23 @@ public class AbbonamentoDAO {
             em.persist(abbonamento);
         }
         em.getTransaction().commit();
+    }
+
+    public void emettiAbbonamento(Vendita vendita, Tratta tratta, Tessera tessera, int tipoAbbonamento) {
+
+        em.getTransaction().begin();
+        Abbonamento abbonamento = new Abbonamento();
+        if(tipoAbbonamento == 1) abbonamento.setValidita(TipoAbbonamento.SETTIMANALE);
+        else abbonamento.setValidita(TipoAbbonamento.MENSILE);
+        abbonamento.setVendita(vendita);
+        abbonamento.setDataEmissione(LocalDate.now());
+        if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
+            abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
+        else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
+        abbonamento.setTratta(tratta);
+        abbonamento.setTessera(tessera);
+        em.persist(abbonamento);
+        em.getTransaction().commit();
+
     }
 }
