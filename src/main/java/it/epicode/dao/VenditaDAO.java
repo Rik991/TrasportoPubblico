@@ -36,4 +36,13 @@ public class VenditaDAO {
         em.remove(vendita);
         em.getTransaction().commit();
     }
+
+
+    public void emettiBiglietto(){}
+
+    //mensili nominativi per utenti con tessera
+    public void emettiAbbonamento(){}
+
+
+
 }

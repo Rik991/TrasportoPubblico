@@ -78,7 +78,6 @@ public class MainCreate {
         tratte.add(tratta4);
 
 
-
         //creiamo nuovi mezzi
         ParcoMezzi autobus1 = new Autobus();
         ParcoMezzi autobus2 = new Autobus();
@@ -125,7 +124,6 @@ public class MainCreate {
         venditaDAO.save(rivenditore);
         venditaDAO.save(distributore1);
         venditaDAO.save(distributore2);
-
 
 
         //creiamo tessere
@@ -176,14 +174,18 @@ public class MainCreate {
         bigliettoDAO.saveAllBiglietti(bigliettiDistributore);
 
 
-
         //creiamo abbonamenti
         List<Abbonamento> abbonamenti = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Abbonamento abbonamento = new Abbonamento();
-           abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-           abbonamento.setTessera(tessere.get(i));
-           abbonamento.setVendita(rivenditore);
+            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+            abbonamento.setTessera(tessere.get(i));
+            abbonamento.setVendita(rivenditore);
+            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
+            abbonamento.setDataEmissione(LocalDate.now());
+            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
+                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
+            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
             abbonamenti.add(abbonamento);
         }
         abbonamentoDAO.saveAllAbbonamenti(abbonamenti);
@@ -194,6 +196,12 @@ public class MainCreate {
             abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
             abbonamento.setTessera(tessereDistributore.get(i));
             abbonamento.setVendita(distributore1);
+            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
+            abbonamento.setDataEmissione(LocalDate.now());
+            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
+                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
+            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
+            abbonamenti.add(abbonamento);
             abbonamentiDistributore.add(abbonamento);
         }
         abbonamentoDAO.saveAllAbbonamenti(abbonamentiDistributore);
@@ -245,36 +253,6 @@ public class MainCreate {
 
 
         distributore2.setInServizio(false); //rotto
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

@@ -24,4 +24,5 @@ public abstract class Vendita {
 
     @OneToMany(mappedBy = "vendita")
     private List<Tessera> tessere = new ArrayList<>();
+
 }
