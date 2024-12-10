@@ -13,6 +13,8 @@ public class DistributoreAutomatico extends Vendita {
     @Column(name = "in_servizio", nullable = false)
     private boolean inServizio;
 
+
+
 //    @Override
 //    public void emettiBiglietto() {
 //        super.emettiBiglietto();

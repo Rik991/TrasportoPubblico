@@ -1,5 +1,6 @@
 package it.epicode.dao;
 
+import it.epicode.entity.biglietteria.DistributoreAutomatico;
 import it.epicode.entity.biglietteria.Vendita;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,12 @@ public class VenditaDAO {
 
     //mensili nominativi per utenti con tessera
     public void emettiAbbonamento() {
+    }
+
+
+    public List<DistributoreAutomatico> findAllDistributors() {
+        return em.createQuery("SELECT d FROM DistributoreAutomatico d", DistributoreAutomatico.class)
+                .getResultList();
     }
 
 
