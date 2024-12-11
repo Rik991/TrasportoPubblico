@@ -45,7 +45,7 @@ public class MainCreate {
         tratta1.setZonaArrivo("Milano");
         tratta1.setOraDiPartenza(LocalTime.of(8, 0));
         tratta1.setOraDiArrivo(LocalTime.of(16, 30));
-//        tratta1.setDurataEffettiva(LocalTime.of(8, 30));
+        tratta1.setDurataEffettiva(LocalTime.of(8, 30));
         trattaDAO.save(tratta1);
 
         tratta2.setZonaPartenza("Marsala");

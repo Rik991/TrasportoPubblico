@@ -63,12 +63,16 @@ public class AbbonamentoDAO {
 
     }
 
-    public boolean findAbbonamentoByTessera(Tessera tessera) {
-       return !em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera = :tessera", Abbonamento.class)
+    public Abbonamento findAbbonamentoByTessera(Tessera tessera) {
+       return em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera = :tessera", Abbonamento.class)
                 .setParameter("tessera", tessera)
-                .getResultList().isEmpty();
-
-       // AGGIUNGERE ANCHE CONTROLLO SULLA DATA
+                .getSingleResult();
 
     }
+    public boolean checkAbbonamento(Tessera tessera) {
+        return !em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera = :tessera", Abbonamento.class)
+                .setParameter("tessera", tessera)
+                .getResultList().isEmpty();
+    }
+
 }
