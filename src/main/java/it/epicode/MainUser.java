@@ -84,9 +84,7 @@ public class MainUser {
     }
 
     public static void main(String[] args) {
-
         System.out.println("Benvenuto nel sistema di trasporto pubblico!");
-
         boolean esecuzione = true;
 
         while (esecuzione) {
@@ -109,6 +107,11 @@ public class MainUser {
                         Tessera tessera = tesseraDAO.findTessera(numeroTessera);
                         if (tesseraDAO.checkRuolo(tessera)) {
                             System.out.println("Buongiorno Amministratore: " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
+
+                            System.out.println("1- \n2- \n3-");
+
+                            //TODO CODICE AMMINISTRATORE
+
 
                         } else {
                             System.out.println("Buongiorno " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
@@ -152,7 +155,6 @@ public class MainUser {
                                     } else {
                                         throw new InputMismatchException("Errore d'inserimento, digita si o no!");
                                     }
-
                                 } else {
                                     System.out.println("Hai già un abbonamento valido! Buon Viaggio");
                                     return;
