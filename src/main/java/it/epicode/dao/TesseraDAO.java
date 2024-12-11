@@ -49,9 +49,9 @@ public class TesseraDAO {
     }
 
     public Tessera findUserByNumeroTessera(int numeroTessera){
-       TypedQuery<Tessera> query = em.createQuery("SELECT t FROM Tessera t WHERE t.numeroTessera = :numeroTessera", Tessera.class);
-           query.setParameter("numeroTessera", numeroTessera);
-           return (Tessera) query.getResultList();
+      return em.createQuery("SELECT t FROM Tessera t WHERE t.numeroTessera = :numeroTessera", Tessera.class)
+               .setParameter("numeroTessera", numeroTessera).getSingleResult();
+
     }
 
     public boolean checkRuolo(Tessera tessera) {

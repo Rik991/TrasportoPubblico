@@ -63,7 +63,8 @@ public class MainUser {
 
         return venditore;
     }
-    public static Tratta chooseTratta (int numero){
+
+    public static Tratta chooseTratta(int numero) {
         Tratta tratta = null;
         List<Tratta> tratte = trattaDAO.findAll();
         if (numero >= 0 && numero < tratte.size()) {
@@ -96,14 +97,16 @@ public class MainUser {
         System.out.println(" 1- per comprare un biglietto, 2- per comprare un abbonamento (tessera richiesta!)");
         int titoloDiViaggio = scanner.nextInt();
         scanner.nextLine();
+        Vendita venditore = null;
+        Tratta tratta = null;
 
         switch (titoloDiViaggio) {
             case 1: //vendita biglietti
                 System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                 int acquisto = scanner.nextInt();
                 scanner.nextLine();
-                Vendita venditore = chooseVenditore(acquisto);
-                Tratta tratta = chooseTratta(trattaScelta);
+                 venditore = chooseVenditore(acquisto);
+                 tratta = chooseTratta(trattaScelta);
                 if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
                     bigliettoDAO.emettiBiglietto(venditore, tratta);
                 }
@@ -124,8 +127,18 @@ public class MainUser {
                             // CODICE PER AMMINISTRATORE
 
                         } else {
+                            System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
+                            int acquistoBoonamento = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println("1. Settimanale - 2. Mensile");
+                            int tipoAbbonamento = scanner.nextInt();
+                            scanner.nextLine();
+                            venditore = chooseVenditore(acquistoBoonamento);
+                            tratta = chooseTratta(trattaScelta);
+                            if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
+                                abbonamentoDAO.emettiAbbonamento(venditore, tratta,tessera, tipoAbbonamento);
+                            }
 
-                            // CODICE PER PASSEGGERO CON TESSERA
                         }
                         break;
 
@@ -137,10 +150,10 @@ public class MainUser {
                         System.out.println("Dove vuoi acquistare la tessera? 1 per rivenditore, 2 per distributore");
                         int acquistoTessera = scanner.nextInt();
                         scanner.nextLine();
-                        chooseVenditore(acquistoTessera);
+                        venditore = chooseVenditore(acquistoTessera);
+                        tesseraDAO.emettiTessera(venditore, userDAO.findById(userId));
                 }
 
-//                        tesseraDAO.emettiTessera(venditaDAO.findById(), userDAO.findById(userId));
 
                 break;
             default:
@@ -151,41 +164,6 @@ public class MainUser {
 
     }
 
-
-    //Menu
-
-//        System.out.println("1 per acquistare biglietto, 2 per acquistare abbonamento");
-//    int scelta = scanner.nextInt();
-//        scanner.nextLine();
-
-
-//           //vendita abbonamenti
-//                System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
-//                int acquisto2Abbonamento = scanner.nextInt();
-//                System.out.println("1. Settimanale - 2. Mensile");
-//                int tipoabbonamento = scanner.nextInt();
-//                scanner.nextLine();
-//                if (acquistoAbbonamento == 1) {
-//                    abbonamentoDAO.emettiAbbonamento(venditaDAO.findById(1L), trattaDAO.findById(1L), tesseraDAO.findById(11L), tipoabbonamento);
-//                } else {
-//                    List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributors();
-//                    System.out.println("Seleziona il distributore:");
-//                    for (int i = 0; i < distributori.size(); i++) {
-//                        System.out.println((i + 2) + ". Distributore " + distributori.get(i).getId());
-//                    }
-//                    int distributoreScelto = scanner.nextInt() - 2;
-//                    scanner.nextLine();
-//                    if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
-//                        DistributoreAutomatico distributore = distributori.get(distributoreScelto);
-//                        if (distributore.isInServizio()) {
-//                            abbonamentoDAO.emettiAbbonamento(distributore, trattaDAO.findById(1L), tesseraDAO.findById(12L), tipoabbonamento);
-//                        } else {
-//                            System.out.println("Distributore fuori servizio!");
-//                        }
-//                    } else {
-//                        System.out.println("Selezione non valida!");
-//                    }
-//                }
 
 
 }
