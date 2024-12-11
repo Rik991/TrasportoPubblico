@@ -62,4 +62,13 @@ public class AbbonamentoDAO {
         em.getTransaction().commit();
 
     }
+
+    public boolean findAbbonamentoByTessera(Tessera tessera) {
+       return !em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera = :tessera", Abbonamento.class)
+                .setParameter("tessera", tessera)
+                .getResultList().isEmpty();
+
+       // AGGIUNGERE ANCHE CONTROLLO SULLA DATA
+
+    }
 }

@@ -1,5 +1,6 @@
 package it.epicode.dao;
 
+import it.epicode.entity.biglietteria.Biglietto;
 import it.epicode.entity.biglietteria.DistributoreAutomatico;
 import it.epicode.entity.biglietteria.Rivenditore;
 import it.epicode.entity.biglietteria.Vendita;
@@ -50,6 +51,12 @@ public class VenditaDAO {
 
     public List<Rivenditore> findAllRivenditori() {
         return em.createQuery("SELECT r FROM Rivenditore r", Rivenditore.class)
+                .getResultList();
+    }
+
+    public List<Biglietto> findBigliettiByVenditore(Vendita venditore){
+        return em.createQuery("SELECT b FROM Biglietto b WHERE b.vendita = :vendita", Biglietto.class)
+                .setParameter("vendita", venditore)
                 .getResultList();
     }
 

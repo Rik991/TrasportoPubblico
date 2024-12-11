@@ -2,6 +2,7 @@ package it.epicode.entity.biglietteria;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,15 @@ public abstract class Vendita {
     private Long id;
 
     @OneToMany(mappedBy = "vendita")
+
     private List<Biglietto> biglietti = new ArrayList<>();
 
     @OneToMany(mappedBy = "vendita")
+
     private List<Abbonamento> abbonamenti = new ArrayList<>();
 
     @OneToMany(mappedBy = "vendita")
+
     private List<Tessera> tessere = new ArrayList<>();
 
 }

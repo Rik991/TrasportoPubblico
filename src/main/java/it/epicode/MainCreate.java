@@ -18,7 +18,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.TreeMap;
 
 public class MainCreate {
     public static void main(String[] args) {
@@ -46,7 +45,7 @@ public class MainCreate {
         tratta1.setZonaArrivo("Milano");
         tratta1.setOraDiPartenza(LocalTime.of(8, 0));
         tratta1.setOraDiArrivo(LocalTime.of(16, 30));
-        tratta1.setDurataEffettiva(LocalTime.of(8, 30));
+//        tratta1.setDurataEffettiva(LocalTime.of(8, 30));
         trattaDAO.save(tratta1);
 
         tratta2.setZonaPartenza("Marsala");
@@ -71,14 +70,11 @@ public class MainCreate {
         tratta4.setDurataEffettiva(LocalTime.of(1, 30));
         trattaDAO.save(tratta4);
 
-
-
         List<Tratta> tratte = new ArrayList<>();
         tratte.add(tratta1);
         tratte.add(tratta2);
         tratte.add(tratta3);
         tratte.add(tratta4);
-
 
         //creiamo nuovi mezzi
         ParcoMezzi autobus1 = new Autobus();
@@ -110,9 +106,6 @@ public class MainCreate {
         tram1.setTotaleTratteEffettuate(20);
         parcoMezziDAO.save(tram1);
 
-
-
-
         tram2.setInServizio(false); //in manutenzione
         tram2.setTratta(tratta4);
         tram2.setTempoInServizio(LocalTime.of(0, 0));
@@ -130,12 +123,10 @@ public class MainCreate {
         venditaDAO.save(distributore1);
         venditaDAO.save(distributore2);
 
-
         //creiamo nuovi user
 
         User amministratore = new Amministratore();
-        User amministratore1 = new Amministratore();
-        User passeggero = new Passeggero();
+        User amministratore2 = new Amministratore();
 
         amministratore.setNome("Danilo");
         amministratore.setCognome("Fumuso");
@@ -143,11 +134,11 @@ public class MainCreate {
 
         userDAO.save(amministratore);
 
-        amministratore1.setNome("Tammaro");
-        amministratore1.setCognome("Miele");
-        amministratore1.setRuolo(Ruolo.AMMINISTRATORE);
+        amministratore2.setNome("Tammaro");
+        amministratore2.setCognome("Miele");
+        amministratore2.setRuolo(Ruolo.AMMINISTRATORE);
 
-        userDAO.save(amministratore1);
+        userDAO.save(amministratore2);
 
 
         List<User> passeggeri = new ArrayList<>();
@@ -157,7 +148,6 @@ public class MainCreate {
             user.setNome(faker.name().firstName());
             user.setCognome(faker.name().lastName());
             user.setRuolo(Ruolo.PASSEGGERO);
-
             passeggeri.add(user);
         }
 
@@ -183,122 +173,123 @@ public class MainCreate {
         tessera2.setDataEmissione(LocalDate.now());//sistemare date per scadenza
         tessera2.setDataScadenza(tessera2.getDataEmissione().plusYears(1));
         tessera2.setAttiva(true);
-        tessera2.setUser(amministratore1);
+        tessera2.setUser(amministratore2);
         tessera2.setVendita(rivenditore);
 
         tessere.add(tessera2);
 
-
-        for (int i = 0; i < 3; i++) {
-            Tessera tessera = new Tessera();
-            tessera.setNumeroTessera(1003L + i);
-            tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
-            tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
-            tessera.setAttiva(true);
-            tessera.setVendita(rivenditore);
-            tessera.setUser(passeggeri.get(i));
-            tessere.add(tessera);
-        }
         tesseraDAO.saveAllTessere(tessere);
 
-        List<Tessera> tessereDistributore = new ArrayList<>();
-        for (int i = 3; i < 7; i++) {
-            Tessera tessera = new Tessera();
-            tessera.setNumeroTessera(2000L + i);
-            tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
-            tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
-            tessera.setAttiva(true);
-            tessera.setVendita(distributore1);
-            tessera.setUser(passeggeri.get(i));
-            tessereDistributore.add(tessera);
-        }
-        tesseraDAO.saveAllTessere(tessereDistributore);
+//        for (int i = 0; i < 3; i++) {
+//            Tessera tessera = new Tessera();
+//            tessera.setNumeroTessera(1003L + i);
+//            tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
+//            tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
+//            tessera.setAttiva(true);
+//            tessera.setVendita(rivenditore);
+//            tessera.setUser(passeggeri.get(i));
+//            tessere.add(tessera);
+//        }
+//
+//
+//        List<Tessera> tessereDistributore = new ArrayList<>();
+//        for (int i = 3; i < 7; i++) {
+//            Tessera tessera = new Tessera();
+//            tessera.setNumeroTessera(2000L + i);
+//            tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
+//            tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
+//            tessera.setAttiva(true);
+//            tessera.setVendita(distributore1);
+//            tessera.setUser(passeggeri.get(i));
+//            tessereDistributore.add(tessera);
+//        }
+//        tesseraDAO.saveAllTessere(tessereDistributore);
+//
+//        //tessere senza abbonamento
+//        Tessera tessera4 = new Tessera();
+//        tessera4.setNumeroTessera(3001L);
+//        tessera4.setDataEmissione(LocalDate.now());
+//        tessera4.setDataScadenza(tessera4.getDataEmissione().plusYears(1));
+//        tessera4.setAttiva(true);
+//        tessera4.setVendita(rivenditore);
+//        tessera4.setUser(passeggeri.get(11));
+//        tesseraDAO.save(tessera4);
+//
+//
+//        Tessera tessera5 = new Tessera();
+//        tessera5.setNumeroTessera(3002L);
+//        tessera5.setDataEmissione(LocalDate.now());
+//        tessera5.setDataScadenza(tessera5.getDataEmissione().plusYears(1));
+//        tessera5.setAttiva(true);
+//        tessera5.setVendita(distributore1);
+//        tessera5.setUser(passeggeri.get(12));
+//        tesseraDAO.save(tessera5);
+//
 
-        //tessere senza abbonamento
-        Tessera tessera4 = new Tessera();
-        tessera4.setNumeroTessera(3001L);
-        tessera4.setDataEmissione(LocalDate.now());
-        tessera4.setDataScadenza(tessera4.getDataEmissione().plusYears(1));
-        tessera4.setAttiva(true);
-        tessera4.setVendita(rivenditore);
-        tessera4.setUser(passeggeri.get(11));
-        tesseraDAO.save(tessera4);
-
-
-        Tessera tessera5 = new Tessera();
-        tessera5.setNumeroTessera(3002L);
-        tessera5.setDataEmissione(LocalDate.now());
-        tessera5.setDataScadenza(tessera5.getDataEmissione().plusYears(1));
-        tessera5.setAttiva(true);
-        tessera5.setVendita(distributore1);
-        tessera5.setUser(passeggeri.get(12));
-        tesseraDAO.save(tessera5);
-
-
-        //creiamo biglietti
-        List<Biglietto> biglietti = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Biglietto biglietto = new Biglietto();
-            biglietto.setVidimato(false);
-            biglietto.setVendita(rivenditore);
-            biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-            biglietti.add(biglietto);
-        }
-        bigliettoDAO.saveAllBiglietti(biglietti);
-
-        List<Biglietto> bigliettiDistributore = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Biglietto biglietto = new Biglietto();
-            biglietto.setVidimato(false);
-            biglietto.setVendita(distributore1);
-            biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-            bigliettiDistributore.add(biglietto);
-        }
-        bigliettoDAO.saveAllBiglietti(bigliettiDistributore);
-
-
-        //creiamo abbonamenti
-        List<Abbonamento> abbonamenti = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            Abbonamento abbonamento = new Abbonamento();
-            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-            abbonamento.setTessera(tessere.get(i));
-            abbonamento.setVendita(rivenditore);
-            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
-            abbonamento.setDataEmissione(LocalDate.now());
-            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
-                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
-            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
-            abbonamenti.add(abbonamento);
-        }
-        abbonamentoDAO.saveAllAbbonamenti(abbonamenti);
-
-        List<Abbonamento> abbonamentiDistributore = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            Abbonamento abbonamento = new Abbonamento();
-            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-            abbonamento.setTessera(tessereDistributore.get(i));
-            abbonamento.setVendita(distributore1);
-            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
-            abbonamento.setDataEmissione(LocalDate.now());
-            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
-                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
-            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
-            abbonamenti.add(abbonamento);
-            abbonamentiDistributore.add(abbonamento);
-        }
-        abbonamentoDAO.saveAllAbbonamenti(abbonamentiDistributore);
+//        //creiamo biglietti
+//        List<Biglietto> biglietti = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            Biglietto biglietto = new Biglietto();
+//            biglietto.setVidimato(false);
+//            biglietto.setVendita(rivenditore);
+//            biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+//            biglietti.add(biglietto);
+//        }
+//        bigliettoDAO.saveAllBiglietti(biglietti);
+//
+//        List<Biglietto> bigliettiDistributore = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            Biglietto biglietto = new Biglietto();
+//            biglietto.setVidimato(false);
+//            biglietto.setVendita(distributore1);
+//            biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+//            bigliettiDistributore.add(biglietto);
+//        }
+//        bigliettoDAO.saveAllBiglietti(bigliettiDistributore);
+//
+//
+//        //creiamo abbonamenti
+//        List<Abbonamento> abbonamenti = new ArrayList<>();
+//        for (int i = 0; i < 6; i++) {
+//            Abbonamento abbonamento = new Abbonamento();
+//            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+//            abbonamento.setTessera(tessere.get(i));
+//            abbonamento.setVendita(rivenditore);
+//            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
+//            abbonamento.setDataEmissione(LocalDate.now());
+//            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
+//                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
+//            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
+//            abbonamenti.add(abbonamento);
+//        }
+//        abbonamentoDAO.saveAllAbbonamenti(abbonamenti);
+//
+//        List<Abbonamento> abbonamentiDistributore = new ArrayList<>();
+//        for (int i = 0; i < 4; i++) {
+//            Abbonamento abbonamento = new Abbonamento();
+//            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
+//            abbonamento.setTessera(tessereDistributore.get(i));
+//            abbonamento.setVendita(distributore1);
+//            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
+//            abbonamento.setDataEmissione(LocalDate.now());
+//            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
+//                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
+//            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
+//            abbonamenti.add(abbonamento);
+//            abbonamentiDistributore.add(abbonamento);
+//        }
+//        abbonamentoDAO.saveAllAbbonamenti(abbonamentiDistributore);
 
 
         rivenditore.setTessere(tessere);
-        rivenditore.setBiglietti(biglietti);
-        rivenditore.setAbbonamenti(abbonamenti);
+//        rivenditore.setBiglietti(biglietti);
+//        rivenditore.setAbbonamenti(abbonamenti);
         venditaDAO.update(rivenditore);
 
         distributore1.setInServizio(true);
-        distributore1.setTessere(tessereDistributore);
-        distributore1.setBiglietti(biglietti);
-        distributore1.setAbbonamenti(abbonamenti);
+//        distributore1.setTessere(tessereDistributore);
+//        distributore1.setBiglietti(biglietti);
+//        distributore1.setAbbonamenti(abbonamenti);
         venditaDAO.update(distributore1);
 
 

@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name="utenti")
 @NamedQuery(name = "Trova_tutto_User", query = "SELECT a FROM User a")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
@@ -23,6 +24,4 @@ public abstract class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
-
-
 }
