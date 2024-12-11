@@ -149,15 +149,10 @@ public class MainCreate {
 
         userDAO.save(amministratore1);
 
-        passeggero.setNome("Riccardo");
-        passeggero.setCognome("Santilli");
-        passeggero.setRuolo(Ruolo.PASSEGGERO);
-
-        userDAO.save(passeggero);
 
         List<User> passeggeri = new ArrayList<>();
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 50; i++) {
             User user = new Passeggero();
             user.setNome(faker.name().firstName());
             user.setCognome(faker.name().lastName());
@@ -193,20 +188,10 @@ public class MainCreate {
 
         tessere.add(tessera2);
 
-        Tessera tessera3 = new Tessera();
-        tessera3.setNumeroTessera(1003L);
-        tessera3.setDataEmissione(LocalDate.now());//sistemare date per scadenza
-        tessera3.setDataScadenza(tessera3.getDataEmissione().plusYears(1));
-        tessera3.setAttiva(true);
-        tessera3.setUser(passeggero);
-        tessera3.setVendita(rivenditore);
-
-        tessere.add(tessera3);
-
 
         for (int i = 0; i < 3; i++) {
             Tessera tessera = new Tessera();
-            tessera.setNumeroTessera(1004L + i);
+            tessera.setNumeroTessera(1003L + i);
             tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
             tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
             tessera.setAttiva(true);
