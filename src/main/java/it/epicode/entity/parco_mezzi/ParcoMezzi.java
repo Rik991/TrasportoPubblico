@@ -18,6 +18,9 @@ public abstract class ParcoMezzi {
     @Column(nullable = false)
     private boolean inServizio; //in servizio o in manutenzione?
 
+    @Column(nullable = false)
+    private String linea;
+
     @OneToOne
     private Tratta tratta;
 
@@ -32,6 +35,8 @@ public abstract class ParcoMezzi {
 
     @Column(name = "totale_tratte_effettuate", nullable = false)
     private int totaleTratteEffettuate = 0;
+
+    public abstract void viaggia(ParcoMezzi mezzo, int traffico);
 
 
 }

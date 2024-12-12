@@ -39,10 +39,10 @@ public class TrattaDAO {
     }
 
 
-    public void createTratta(String modello, boolean inServizio){
+    public void createTratta(String linea, boolean inServizio){
         em.getTransaction().begin();
         Autobus nuovoAutobus = new Autobus();
-        nuovoAutobus.setModello(modello);
+        nuovoAutobus.setLinea(linea);
         nuovoAutobus.setInServizio(inServizio);
         em.persist(nuovoAutobus);
         em.getTransaction().commit();

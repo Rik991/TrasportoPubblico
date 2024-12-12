@@ -37,4 +37,7 @@ public class Tratta {
 
     @OneToMany(mappedBy = "tratta")
     private List<Abbonamento> abbonamenti;
+
+    @Column(name = "numero_viaggi")
+    private int numeroViaggi = 0;
 }

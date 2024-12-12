@@ -6,6 +6,7 @@ import it.epicode.entity.exceptions.TesseraNotFoundException;
 import it.epicode.entity.exceptions.TrattaException;
 import it.epicode.entity.exceptions.VenditoreException;
 import it.epicode.entity.parco_mezzi.Autobus;
+import it.epicode.entity.parco_mezzi.ParcoMezzi;
 import it.epicode.entity.parco_mezzi.Tram;
 import it.epicode.entity.user.User;
 import jakarta.persistence.EntityManager;
@@ -97,6 +98,7 @@ public class MainUser {
                 scanner.nextLine();
                 Vendita venditore = null;
                 Tratta tratta = null;
+                List<Tratta> tratte = trattaDAO.findAll();
 
                 switch (scelta) {
                     case 1:
@@ -111,13 +113,13 @@ public class MainUser {
                         if (tesseraDAO.checkRuolo(tessera)) {
                             System.out.println("Buongiorno Amministratore: " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
 
-                            System.out.println("1- Gestisci tratte e linee \n2- \n3-");
+                            System.out.println("1- Gestisci tratte e linee \n2-Controllo Mezzi \n3-Statistiche venditori");
 
                             int sceltaAmministratore = scanner.nextInt();
                             scanner.nextLine();
-                            switch (sceltaAmministratore) {
+                            switch (sceltaAmministratore) { //switch admin gestione tratte
                                 case 1:
-                                    System.out.println("Cosa vuoi fare? 1. Modifica linea 2. Elimina linea 3. Dichiara ritardo 4. Esci");
+                                    System.out.println("Cosa vuoi fare? 1. Modifica linea 2. Elimina linea 3. Dichiara ritardo(in Viaggio) 4. Esci");
                                     int sceltaAmministratoreGestioneTratta = scanner.nextInt();
                                     switch (sceltaAmministratoreGestioneTratta) {
                                         case 1:
@@ -145,8 +147,8 @@ public class MainUser {
                                                 break;
                                             }
                                             ;
-                                            System.out.println("Inserisci il modello");
-                                            String modello = scanner.nextLine();
+                                            System.out.println("Inserisci il linea");
+                                            String linea = scanner.nextLine();
                                             scanner.nextLine();
 
                                             System.out.println("Inserisci la zona di partenza");
@@ -159,10 +161,10 @@ public class MainUser {
                                             LocalTime oraArrivo = LocalTime.parse(scanner.nextLine());
 
                                             if (tipoMezzo == 1) {
-                                                parcoMezziDAO.createBus(modello, inServizio, zonaPartenza, zonaArrivo, oraPartenza, oraArrivo);
+                                                parcoMezziDAO.createBus(linea, inServizio, zonaPartenza, zonaArrivo, oraPartenza, oraArrivo);
                                                 System.out.println("Autobus creato con successo");
                                             } else if (tipoMezzo == 2) {
-                                                parcoMezziDAO.createTram(modello, inServizio, zonaPartenza, zonaArrivo, oraPartenza, oraArrivo);
+                                                parcoMezziDAO.createTram(linea, inServizio, zonaPartenza, zonaArrivo, oraPartenza, oraArrivo);
                                                 System.out.println("Tram creato con successo");
                                             } else {
                                                 System.out.println("Opzione non valida!");
@@ -186,42 +188,59 @@ public class MainUser {
                                             }
                                             break;
                                         case 3:
+                                            List<ParcoMezzi> mezziInViaggio = parcoMezziDAO.findAll();
+                                            System.out.println("Su quale mezzo stai viaggiando? 1. Autobus o 2. Tram?");
+                                            int tipoMezzoScelto = scanner.nextInt();
+                                            scanner.nextLine();
+                                            if (tipoMezzoScelto == 1) {//autobus
+                                                parcoMezziDAO.isAutobusOrTram(mezziInViaggio, tipoMezzoScelto);
+                                            } else if (tipoMezzoScelto == 2) {//tram
+                                                parcoMezziDAO.isAutobusOrTram(mezziInViaggio, tipoMezzoScelto);
+                                            } else {
+                                                throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
+                                            }
+                                            Long LineaScelta = scanner.nextLong();
+                                            scanner.nextLine();
+                                            ParcoMezzi mezzoScelto = parcoMezziDAO.findById(LineaScelta);
+                                            System.out.println("Linea selezionata: " + mezzoScelto.getLinea());
+                                            System.out.println("Durata prevista: " + mezzoScelto.getTratta().getDurataEffettiva()
+                                                    + "\nArrivo previsto alle: " + mezzoScelto.getTratta().getOraDiArrivo());
                                             System.out.println("C'è traffico? Inserisci true o false");
                                             boolean traffico = scanner.nextBoolean();
-                                            if(traffico) {
+                                            if (traffico) {
                                                 System.out.println("Inserisci i minuti di ritardo: ");
                                                 int ritardo = scanner.nextInt();
                                                 scanner.nextLine();
-                                                //Mettere get()
-//                                        durataEffettiva.plusMinutes(ritardo);
-//                                        System.out.println("Il nuovo orario di arrivo sarà: " + oraArrivo);
-
-                                            } else {
-                                                //Mettere get()
-
+                                                mezzoScelto.viaggia(mezzoScelto, ritardo);
+                                                System.out.println("Durata effettiva: " + mezzoScelto.getTratta().getDurataEffettiva().plusMinutes(ritardo)
+                                                        + " \nArrivo previsto alle: " + mezzoScelto.getTratta().getOraDiArrivo().plusMinutes(ritardo));
+                                                System.out.println("Segnalazione avvenuta correttamente.");
                                             }
                                         case 4:
-                                            break;
+                                            System.out.println("Arrivederci e buon lavoro!");
+                                            return;
+                                        default:
+                                            throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
                                     }
-
+                                    //switch principale (amministratore)
                                     break;
                                 case 2:
 
                                     break;
                                 case 3:
 
-                                     break;
+                                    break;
                                 default:
                                     throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
                             }
 
-                            //TODO CODICE AMMINISTRATORE
+
 
 
                         } else {
                             System.out.println("Buongiorno " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
                             System.out.println("Dove vuoi andare?");
-                            List<Tratta> tratte = trattaDAO.findAll();
+
                             System.out.println("Seleziona la tratta:");
                             for (int i = 0; i < tratte.size(); i++) {
                                 System.out.println((i + 1) + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
@@ -308,7 +327,7 @@ public class MainUser {
                         switch (scelta) {
                             case 1:
                                 System.out.println("Dove vuoi andare?");
-                                List<Tratta> tratte = trattaDAO.findAll();
+                                tratte = trattaDAO.findAll();//forse superflua
                                 System.out.println("Seleziona la tratta:");
                                 for (int i = 0; i < tratte.size(); i++) {
                                     System.out.println((i + 1) + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());

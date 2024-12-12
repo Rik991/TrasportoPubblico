@@ -84,6 +84,7 @@ public class MainCreate {
 
         autobus1.setInServizio(true); //in servizio
         autobus1.setTratta(tratta1); //roma-milano
+        autobus1.setLinea("A1");
         autobus1.setTempoInServizio(LocalTime.of(8, 0));
         autobus1.setTempoInManutenzione(LocalTime.of(0, 0));
         autobus1.setNumeroBigliettiVidimati(40);
@@ -92,6 +93,7 @@ public class MainCreate {
 
         autobus2.setInServizio(false); //in manutenzione
         autobus2.setTratta(tratta2); //marsala-messina
+        autobus2.setLinea("A2");
         autobus2.setTempoInServizio(LocalTime.of(0, 0));
         autobus2.setTempoInManutenzione(LocalTime.of(23, 0));
         autobus2.setNumeroBigliettiVidimati(0);
@@ -99,7 +101,8 @@ public class MainCreate {
         parcoMezziDAO.save(autobus2);
 
         tram1.setInServizio(true); //in servizio
-        tram1.setTratta(tratta3); //roma-milano
+        tram1.setTratta(tratta3);
+        tram1.setLinea("T1");
         tram1.setTempoInServizio(LocalTime.of(18, 0));
         tram1.setTempoInManutenzione(LocalTime.of(0, 0));
         tram1.setNumeroBigliettiVidimati(400);
@@ -108,6 +111,7 @@ public class MainCreate {
 
         tram2.setInServizio(false); //in manutenzione
         tram2.setTratta(tratta4);
+        tram2.setLinea("T2");
         tram2.setTempoInServizio(LocalTime.of(0, 0));
         tram2.setTempoInManutenzione(LocalTime.of(23, 0));
         tram2.setNumeroBigliettiVidimati(0);
