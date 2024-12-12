@@ -290,19 +290,37 @@ public class MainUser {
                                 }
                             }
 
-                            System.out.println("1- per comprare un biglietto, 2- per comprare un abbonamento");
+                            System.out.println("1-Ho già un biglietto, 2- per comprare un biglietto, 3- per comprare un abbonamento");
                             int titoloDiViaggio = scanner.nextInt();
                             scanner.nextLine();
 
                             switch (titoloDiViaggio) {
                                 case 1:
+                                    User user = tessera.getUser();
+                                    List<Biglietto> bigliettiUtente = user.getBiglietti().stream()
+                                            .filter(biglietto -> !biglietto.isVidimato())
+                                            .filter(biglietto -> biglietto.getTratta().equals(trattaDAO.findById(1L))).toList();
+                                    if (bigliettiUtente.size() <= 0) {
+                                        throw new TicketEx("Nessun biglietto disponibile!");
+                                    }
+                                    System.out.println("I tuoi biglietti: ");
+                                    for (int i = 0; i < bigliettiUtente.size(); i++) {
+                                        System.out.println(bigliettiUtente.get(i).getId() + " " + bigliettiUtente.get(i).getTratta().getZonaPartenza() + " - " + bigliettiUtente.get(i).getTratta().getZonaArrivo());
+                                    }
+                                    System.out.println("Quale Biglietto vuoi usare?");
+                                    Long sceltaBiglietto = scanner.nextLong();
+                                    scanner.nextLine();
+                                    Biglietto bigliettoScelto = bigliettoDAO.findById(sceltaBiglietto);
+                                    bigliettoDAO.vidimaBiglietto(bigliettoScelto, tratta);
+                                    break;
+
+                                case 2:
+                                    user = tessera.getUser();
+
                                     System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                                     int acquistoBiglietto = scanner.nextInt();
                                     scanner.nextLine();
-                                    System.out.println("Inserisci il tuo userID per completare l'acquisto");
-                                    Long userID = scanner.nextLong();
-                                    scanner.nextLine();
-                                    User user = userDAO.findById(userID);
+
                                     venditore = chooseVenditore(acquistoBiglietto);
                                     tratta = chooseTratta(trattaScelta);
                                     if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
@@ -314,6 +332,7 @@ public class MainUser {
                                         if (partenza.equals("si")) {
                                             bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
                                             System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
+                                            return;
                                         } else if (partenza.equals("no")) {
                                             System.out.println("Grazie per aver scelto il trasporto pubblico!");
                                             break;
@@ -323,7 +342,7 @@ public class MainUser {
                                     }
                                     break;
 
-                                case 2:
+                                case 3:
                                     System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                                     int acquistoAbbonamento = scanner.nextInt();
                                     scanner.nextLine();
@@ -370,6 +389,11 @@ public class MainUser {
                                 bigliettoDAO.vidimaBiglietto(bigliettoScelto, tratta);
                                 break;
                             case 2:
+                                System.out.println("Inserisci il tuo userID per completare l'acquisto");
+                                userID = scanner.nextLong();
+                                scanner.nextLine();
+                                user = userDAO.findById(userID);
+
                                 System.out.println("Dove vuoi andare?");
                                 tratte = trattaDAO.findAll();//forse superflua
                                 System.out.println("Seleziona la tratta:");
@@ -384,10 +408,7 @@ public class MainUser {
                                 System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                                 int acquistoBiglietto = scanner.nextInt();
                                 scanner.nextLine();
-                                System.out.println("Inserisci il tuo userID per completare l'acquisto");
-                                userID = scanner.nextLong();
-                                scanner.nextLine();
-                                user = userDAO.findById(userID);
+
                                 venditore = chooseVenditore(acquistoBiglietto);
                                 tratta = chooseTratta(trattaScelta);
                                 if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
@@ -398,6 +419,7 @@ public class MainUser {
                                     if (partenza.equals("si")) {
                                         bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
                                         System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
+                                        return;
                                     } else if (partenza.equals("no")) {
                                         System.out.println("Grazie per aver scelto il trasporto pubblico!");
                                         break;
@@ -409,13 +431,15 @@ public class MainUser {
                                 }
                                 break;
                             case 3:
-                                System.out.println("Dove vuoi acquistarla? 1 per rivenditore, 2 per distributore");
-                                int acquistoTessera = scanner.nextInt();
-                                scanner.nextLine();
                                 System.out.println("Inserisci il tuo userID per completare l'acquisto");
                                 Long userId = scanner.nextLong();
                                 scanner.nextLine();
                                 User userWithoutT = userDAO.findById(userId);
+
+                                System.out.println("Dove vuoi acquistarla? 1 per rivenditore, 2 per distributore");
+                                int acquistoTessera = scanner.nextInt();
+                                scanner.nextLine();
+
                                 venditore = chooseVenditore(acquistoTessera);
                                 Tessera nuovaTessera = tesseraDAO.emettiTessera(venditore, userWithoutT);
                                 System.out.println("Grazie, " + userWithoutT.getNome() + " " + userWithoutT.getCognome() + "\nLa tua nuova tessera ha numero: " + nuovaTessera.getNumeroTessera());
@@ -423,14 +447,12 @@ public class MainUser {
                             default:
                                 throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
                         }
-
                         break;
                     default:
                         throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
 
                 }
-                //nella home page, l'utente può decidere di partire subito (check sul biglietto)
-                //chiedere se ha già il biglietto (quindi mostrarli, ricorda che il biglietto è legato alla tratta!)
+
                 //rinnovaTessera, se scaduta chiedere di rinnovarla
                 //amministratore deve vedere statistiche biglietti e statistiche mezzi (tempo in servizio )
 
