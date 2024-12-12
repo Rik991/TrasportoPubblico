@@ -409,6 +409,10 @@ public class MainUser {
                 }
                 //nella home page, l'utente può decidere di partire subito (check sul biglietto)
                 //chiedere se ha già il biglietto (quindi mostrarli, ricorda che il biglietto è legato alla tratta!)
+                //rinnovaTessera, se scaduta chiedere di rinnovarla
+                //amministratore deve vedere statistiche biglietti e statistiche mezzi (tempo in servizio )
+
+
 
 
 
