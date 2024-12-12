@@ -5,6 +5,8 @@ import it.epicode.entity.biglietteria.*;
 import it.epicode.entity.exceptions.TesseraNotFoundException;
 import it.epicode.entity.exceptions.TrattaException;
 import it.epicode.entity.exceptions.VenditoreException;
+import it.epicode.entity.parco_mezzi.Autobus;
+import it.epicode.entity.parco_mezzi.Tram;
 import it.epicode.entity.user.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -13,6 +15,7 @@ import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -114,6 +117,92 @@ public class MainUser {
                             scanner.nextLine();
                             switch (sceltaAmministratore) {
                                 case 1:
+                                    System.out.println("Cosa vuoi fare? 1. Modifica linea 2. Elimina linea 3. Dichiara ritardo 4. Esci");
+                                    int sceltaAmministratoreGestioneTratta = scanner.nextInt();
+                                    switch (sceltaAmministratoreGestioneTratta) {
+                                        case 1:
+                                            System.out.println("1. Autobus o 2. Tram?");
+                                            int tipoMezzo = scanner.nextInt();
+                                            System.out.println("In servizio? (Inserisci true o false)");
+                                            boolean inServizio = scanner.nextBoolean();
+                                            scanner.nextLine();
+                                            if (!inServizio) {
+                                                if (tipoMezzo == 1) {
+                                                    Autobus nuovoAutobus = new Autobus();
+                                                    nuovoAutobus.setInServizio(false);
+                                                    nuovoAutobus.setTempoInManutenzione(LocalTime.now());
+                                                    nuovoAutobus.setTempoInServizio(LocalTime.MIN);
+                                                    parcoMezziDAO.save(nuovoAutobus);
+                                                    System.out.println("Il mezzo è in manutenzione. Tempo di manutenzione: " + nuovoAutobus.getTempoInManutenzione());
+                                                } else if (tipoMezzo == 2) {
+                                                    Tram nuovoTram = new Tram();
+                                                    nuovoTram.setInServizio(false);
+                                                    nuovoTram.setTempoInManutenzione(LocalTime.now());
+                                                    nuovoTram.setTempoInServizio(LocalTime.MIN);
+                                                    parcoMezziDAO.save(nuovoTram);
+                                                    System.out.println("Il mezzo è in manutenzione. Tempo di manutenzione: " + nuovoTram.getTempoInManutenzione());
+                                                }
+                                                break;
+                                            }
+                                            ;
+                                            System.out.println("Inserisci il modello");
+                                            String modello = scanner.nextLine();
+                                            scanner.nextLine();
+
+                                            System.out.println("Inserisci la zona di partenza");
+                                            String zonaPartenza = scanner.nextLine();
+                                            System.out.println("Inserisci la zona di arrivo");
+                                            String zonaArrivo = scanner.nextLine();
+                                            System.out.println("Inserisci l'ora di partenza (hh:mm)");
+                                            LocalTime oraPartenza = LocalTime.parse(scanner.nextLine());
+                                            System.out.println("Inserisci l'ora di arrivo (hh:mm)");
+                                            LocalTime oraArrivo = LocalTime.parse(scanner.nextLine());
+
+                                            if (tipoMezzo == 1) {
+                                                parcoMezziDAO.createBus(modello, inServizio, zonaPartenza, zonaArrivo, oraPartenza, oraArrivo);
+                                                System.out.println("Autobus creato con successo");
+                                            } else if (tipoMezzo == 2) {
+                                                parcoMezziDAO.createTram(modello, inServizio, zonaPartenza, zonaArrivo, oraPartenza, oraArrivo);
+                                                System.out.println("Tram creato con successo");
+                                            } else {
+                                                System.out.println("Opzione non valida!");
+                                            }
+                                            break;
+                                        case 2:
+                                            System.out.println("Che tratta vuoi eliminare?");
+                                            List<Tratta> trattaDaEliminare = trattaDAO.findAll();
+                                            System.out.println("Seleziona la tratta:");
+                                            for (int i = 0; i < tratte.size(); i++) {
+                                                System.out.println((i + 1) + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
+                                            }
+                                            int chooseTratta = scanner.nextInt() - 1;
+                                            scanner.nextLine();
+                                            if (chooseTratta >= 0 && chooseTratta < tratte.size()) {
+                                                Tratta trattaDaElinimare = tratte.get(chooseTratta);
+                                                trattaDAO.delete(trattaDaElinimare);
+                                                System.out.println("Tratta eliminata con successo.");
+                                            } else {
+                                                System.out.println("Selezione non valida.");
+                                            }
+                                            break;
+                                        case 3:
+                                            System.out.println("C'è traffico? Inserisci true o false");
+                                            boolean traffico = scanner.nextBoolean();
+                                            if(traffico) {
+                                                System.out.println("Inserisci i minuti di ritardo: ");
+                                                int ritardo = scanner.nextInt();
+                                                scanner.nextLine();
+                                                //Mettere get()
+//                                        durataEffettiva.plusMinutes(ritardo);
+//                                        System.out.println("Il nuovo orario di arrivo sarà: " + oraArrivo);
+
+                                            } else {
+                                                //Mettere get()
+
+                                            }
+                                        case 4:
+                                            break;
+                                    }
 
                                     break;
                                 case 2:

@@ -1,6 +1,7 @@
 package it.epicode.dao;
 
 import it.epicode.entity.biglietteria.Tratta;
+import it.epicode.entity.parco_mezzi.Autobus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,16 @@ public class TrattaDAO {
     public void delete(Tratta oggetto) {
         em.getTransaction().begin();
         em.remove(oggetto);
+        em.getTransaction().commit();
+    }
+
+
+    public void createTratta(String modello, boolean inServizio){
+        em.getTransaction().begin();
+        Autobus nuovoAutobus = new Autobus();
+        nuovoAutobus.setModello(modello);
+        nuovoAutobus.setInServizio(inServizio);
+        em.persist(nuovoAutobus);
         em.getTransaction().commit();
     }
 }
