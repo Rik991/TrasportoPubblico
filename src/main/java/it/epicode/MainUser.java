@@ -3,6 +3,7 @@ package it.epicode;
 import it.epicode.dao.*;
 import it.epicode.entity.biglietteria.*;
 import it.epicode.entity.exceptions.TesseraNotFoundException;
+import it.epicode.entity.exceptions.TicketEx;
 import it.epicode.entity.exceptions.TrattaException;
 import it.epicode.entity.exceptions.VenditoreException;
 import it.epicode.entity.parco_mezzi.Autobus;
@@ -315,7 +316,7 @@ public class MainUser {
                                             System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
                                         } else if (partenza.equals("no")) {
                                             System.out.println("Grazie per aver scelto il trasporto pubblico!");
-                                            return;
+                                            break;
                                         } else {
                                             throw new InputMismatchException("Errore d'inserimento, per favore digitare si o no!");
                                         }
@@ -343,11 +344,32 @@ public class MainUser {
                         }
                         break;
                     case 2:
-                        System.out.println("1- Acquista biglietto, 2- Fai una tessera");
+                        System.out.println("1- Ho già un Biglietto\n2- Acquista un Biglietto\n3- Fai una tessera");
                         scelta = scanner.nextInt();
                         scanner.nextLine();
                         switch (scelta) {
                             case 1:
+                                System.out.println("Inserisci il tuo userID per completare l'acquisto");
+                                Long userID = scanner.nextLong();
+                                scanner.nextLine();
+                                User user = userDAO.findById(userID);
+                                List<Biglietto> bigliettiUtente = user.getBiglietti().stream()
+                                        .filter(biglietto -> !biglietto.isVidimato()).toList();
+                                if (bigliettiUtente.size() <= 0) {
+                                    throw new TicketEx("Nessun biglietto disponibile!");
+
+                                }
+                                System.out.println("I tuoi biglietti: ");
+                                for (int i = 0; i < bigliettiUtente.size(); i++) {
+                                    System.out.println(bigliettiUtente.get(i).getId() + " " + bigliettiUtente.get(i).getTratta().getZonaPartenza() + " - " + bigliettiUtente.get(i).getTratta().getZonaArrivo());
+                                }
+                                System.out.println("Quale Biglietto vuoi usare?");
+                                Long sceltaBiglietto = scanner.nextLong();
+                                scanner.nextLine();
+                                Biglietto bigliettoScelto = bigliettoDAO.findById(sceltaBiglietto);
+                                bigliettoDAO.vidimaBiglietto(bigliettoScelto, tratta);
+                                break;
+                            case 2:
                                 System.out.println("Dove vuoi andare?");
                                 tratte = trattaDAO.findAll();//forse superflua
                                 System.out.println("Seleziona la tratta:");
@@ -363,9 +385,9 @@ public class MainUser {
                                 int acquistoBiglietto = scanner.nextInt();
                                 scanner.nextLine();
                                 System.out.println("Inserisci il tuo userID per completare l'acquisto");
-                                Long userID = scanner.nextLong();
+                                userID = scanner.nextLong();
                                 scanner.nextLine();
-                                User user = userDAO.findById(userID);
+                                user = userDAO.findById(userID);
                                 venditore = chooseVenditore(acquistoBiglietto);
                                 tratta = chooseTratta(trattaScelta);
                                 if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
@@ -378,7 +400,7 @@ public class MainUser {
                                         System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
                                     } else if (partenza.equals("no")) {
                                         System.out.println("Grazie per aver scelto il trasporto pubblico!");
-                                        return;
+                                        break;
                                     } else {
                                         throw new InputMismatchException("Errore d'inserimento, per favore digitare si o no!");
                                     }
@@ -386,7 +408,7 @@ public class MainUser {
 
                                 }
                                 break;
-                            case 2:
+                            case 3:
                                 System.out.println("Dove vuoi acquistarla? 1 per rivenditore, 2 per distributore");
                                 int acquistoTessera = scanner.nextInt();
                                 scanner.nextLine();
@@ -413,11 +435,10 @@ public class MainUser {
                 //amministratore deve vedere statistiche biglietti e statistiche mezzi (tempo in servizio )
 
 
-
-
-
-            } catch (VenditoreException | TrattaException | TesseraNotFoundException | InputMismatchException | IllegalArgumentException e) {
+            } catch (VenditoreException | TrattaException | TesseraNotFoundException | InputMismatchException |
+                     IllegalArgumentException | TicketEx e) {
                 LOGGER.error(e::getMessage);
+
             }
 
             System.out.print("Hai bisogno di altro? (si/no): ");
