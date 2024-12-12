@@ -108,7 +108,23 @@ public class MainUser {
                         if (tesseraDAO.checkRuolo(tessera)) {
                             System.out.println("Buongiorno Amministratore: " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
 
-                            System.out.println("1- \n2- \n3-");
+                            System.out.println("1- Gestisci tratte e linee \n2- \n3-");
+
+                            int sceltaAmministratore = scanner.nextInt();
+                            scanner.nextLine();
+                            switch (sceltaAmministratore) {
+                                case 1:
+
+                                    break;
+                                case 2:
+
+                                    break;
+                                case 3:
+
+                                     break;
+                                default:
+                                    throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
+                            }
 
                             //TODO CODICE AMMINISTRATORE
 
