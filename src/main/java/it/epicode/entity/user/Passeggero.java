@@ -9,4 +9,7 @@ import lombok.Data;
 @NamedQuery(name = "Trova_tutto_Passeggero", query = "SELECT a FROM Passeggero a")
 public class Passeggero extends User {
 
+
+
+
 }

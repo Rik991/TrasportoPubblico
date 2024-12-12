@@ -15,6 +15,7 @@ import jakarta.persistence.Persistence;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.InputMismatchException;
@@ -227,14 +228,17 @@ public class MainUser {
                                 case 2:
 
                                     break;
-                                case 3:
+                                case 3://statistiche venditori
+                                    //                List<Biglietto> listaBigliettiVenditore1 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(1L));
+//                List<Biglietto> listaBigliettiVenditore2 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(2L));
+//                List<Biglietto> listaBigliettiVenditore3 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(3L));//
+//                System.out.println("Biglietti venduti da Rivenditore1: " + listaBigliettiVenditore1.size());
+//                System.out.println("Biglietti venduti da Distributore1: " + listaBigliettiVenditore2.size());
 
                                     break;
                                 default:
                                     throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
                             }
-
-
 
 
                         } else {
@@ -294,10 +298,27 @@ public class MainUser {
                                     System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                                     int acquistoBiglietto = scanner.nextInt();
                                     scanner.nextLine();
+                                    System.out.println("Inserisci il tuo userID per completare l'acquisto");
+                                    Long userID = scanner.nextLong();
+                                    scanner.nextLine();
+                                    User user = userDAO.findById(userID);
                                     venditore = chooseVenditore(acquistoBiglietto);
                                     tratta = chooseTratta(trattaScelta);
                                     if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
-                                        bigliettoDAO.emettiBiglietto(venditore, tratta);
+                                        bigliettoDAO.emettiBiglietto(venditore, tratta, user);
+                                        System.out.println("Biglietto acquistato con successo!");
+
+                                        System.out.println("Vuoi partire adesso? (si/no)");
+                                        String partenza = scanner.nextLine().toLowerCase();
+                                        if (partenza.equals("si")) {
+                                            bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
+                                            System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
+                                        } else if (partenza.equals("no")) {
+                                            System.out.println("Grazie per aver scelto il trasporto pubblico!");
+                                            return;
+                                        } else {
+                                            throw new InputMismatchException("Errore d'inserimento, per favore digitare si o no!");
+                                        }
                                     }
                                     break;
 
@@ -312,6 +333,7 @@ public class MainUser {
                                     tratta = chooseTratta(trattaScelta);
                                     if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
                                         abbonamentoDAO.emettiAbbonamento(venditore, tratta, tessera, tipoAbbonamento);
+                                        System.out.println("Abbonamento acquistato con successo!");
                                     }
                                     break;
 
@@ -340,24 +362,41 @@ public class MainUser {
                                 System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
                                 int acquistoBiglietto = scanner.nextInt();
                                 scanner.nextLine();
-                                venditore = chooseVenditore(acquistoBiglietto);
-                                tratta = chooseTratta(trattaScelta);
-                                if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
-                                    bigliettoDAO.emettiBiglietto(venditore, tratta);
-                                }
-                                break;
-                            case 2:
-                                System.out.println("Inserisci il tuo userID");
+                                System.out.println("Inserisci il tuo userID per completare l'acquisto");
                                 Long userID = scanner.nextLong();
                                 scanner.nextLine();
                                 User user = userDAO.findById(userID);
+                                venditore = chooseVenditore(acquistoBiglietto);
+                                tratta = chooseTratta(trattaScelta);
+                                if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
+                                    bigliettoDAO.emettiBiglietto(venditore, tratta, user);
+                                    System.out.println("Biglietto acquistato con successo!");
+                                    System.out.println("Vuoi partire adesso? (si/no)");
+                                    String partenza = scanner.nextLine().toLowerCase();
+                                    if (partenza.equals("si")) {
+                                        bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
+                                        System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
+                                    } else if (partenza.equals("no")) {
+                                        System.out.println("Grazie per aver scelto il trasporto pubblico!");
+                                        return;
+                                    } else {
+                                        throw new InputMismatchException("Errore d'inserimento, per favore digitare si o no!");
+                                    }
 
+
+                                }
+                                break;
+                            case 2:
                                 System.out.println("Dove vuoi acquistarla? 1 per rivenditore, 2 per distributore");
                                 int acquistoTessera = scanner.nextInt();
                                 scanner.nextLine();
+                                System.out.println("Inserisci il tuo userID per completare l'acquisto");
+                                Long userId = scanner.nextLong();
+                                scanner.nextLine();
+                                User userWithoutT = userDAO.findById(userId);
                                 venditore = chooseVenditore(acquistoTessera);
-                                Tessera nuovaTessera = tesseraDAO.emettiTessera(venditore, user);
-                                System.out.println("Grazie, " + user.getNome() + " " + user.getCognome() + "\nLa tua nuova tessera ha numero: " + nuovaTessera.getNumeroTessera());
+                                Tessera nuovaTessera = tesseraDAO.emettiTessera(venditore, userWithoutT);
+                                System.out.println("Grazie, " + userWithoutT.getNome() + " " + userWithoutT.getCognome() + "\nLa tua nuova tessera ha numero: " + nuovaTessera.getNumeroTessera());
                                 break;
                             default:
                                 throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
@@ -368,16 +407,12 @@ public class MainUser {
                         throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
 
                 }
+                //nella home page, l'utente può decidere di partire subito (check sul biglietto)
+                //chiedere se ha già il biglietto (quindi mostrarli, ricorda che il biglietto è legato alla tratta!)
 
 
-//                List<Biglietto> listaBigliettiVenditore1 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(1L));
-//                List<Biglietto> listaBigliettiVenditore2 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(2L));
-//                List<Biglietto> listaBigliettiVenditore3 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(3L));
-//
-//                System.out.println("Biglietti venduti da Rivenditore1: " + listaBigliettiVenditore1.size());
-//                System.out.println("Biglietti venduti da Distributore1: " + listaBigliettiVenditore2.size());
 
-            } catch (VenditoreException | TrattaException | TesseraNotFoundException | InputMismatchException e) {
+            } catch (VenditoreException | TrattaException | TesseraNotFoundException | InputMismatchException | IllegalArgumentException e) {
                 LOGGER.error(e::getMessage);
             }
 

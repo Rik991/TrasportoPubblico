@@ -3,10 +3,13 @@ package it.epicode.dao;
 import it.epicode.entity.biglietteria.Biglietto;
 import it.epicode.entity.biglietteria.Tratta;
 import it.epicode.entity.biglietteria.Vendita;
+import it.epicode.entity.parco_mezzi.ParcoMezzi;
+import it.epicode.entity.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -48,14 +51,46 @@ public class BigliettoDAO {
 
     }
 
-    public void emettiBiglietto(Vendita vendita, Tratta tratta) {
+    public void emettiBiglietto(Vendita vendita, Tratta tratta, User user) {
         em.getTransaction().begin();
         Biglietto biglietto = new Biglietto();
         biglietto.setVidimato(false);
         biglietto.setVendita(vendita);
         biglietto.setTratta(tratta);
+        biglietto.setUser(user);
         em.persist(biglietto);
         em.getTransaction().commit();
+    }
+
+    public void vidimaBiglietto(Biglietto biglietto, Tratta tratta) {
+        if (biglietto.isVidimato()) {
+            throw new IllegalArgumentException("Biglietto già vidimato");
+        }
+        em.getTransaction().begin();
+        biglietto.setVidimato(true);
+        biglietto.setTratta(tratta);
+        biglietto.setDataVidimazione(LocalDateTime.now());
+        em.merge(biglietto);
+        em.getTransaction().commit();
+    }
+
+    public int contaBigliettiVidimatiPerMezzo(Long mezzoId) {
+        return em.createQuery(
+                        "SELECT COUNT(b) FROM Biglietto b WHERE b.mezzo.id = :mezzoId", Long.class)
+                .setParameter("mezzoId", mezzoId)
+                .getSingleResult()
+                .intValue();
+    }
+
+    public int contaBigliettiVidimatiInPeriodo(Long mezzoId, LocalDateTime inizio, LocalDateTime fine) {
+        return em.createQuery(
+                        "SELECT COUNT(b) FROM Biglietto b WHERE b.mezzo.id = :mezzoId AND b.dataVidimazione BETWEEN :inizio AND :fine",
+                        Long.class)
+                .setParameter("mezzoId", mezzoId)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getSingleResult()
+                .intValue();
     }
 
 }

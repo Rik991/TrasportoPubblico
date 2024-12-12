@@ -10,7 +10,7 @@
             <!-- user del db-->
             <property name="javax.persistence.jdbc.user" value="postgres"/>
             <!-- password del db-->
-            <property name="javax.persistence.jdbc.password" value="acmilan06"/>
+            <property name="javax.persistence.jdbc.password" value="123456"/>
 
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="hibernate.default_schema" value="public"/>

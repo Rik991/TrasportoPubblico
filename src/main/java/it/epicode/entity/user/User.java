@@ -1,9 +1,12 @@
 package it.epicode.entity.user;
 
+import it.epicode.entity.biglietteria.Biglietto;
 import it.epicode.entity.biglietteria.Ruolo;
 import it.epicode.entity.biglietteria.Tessera;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -24,4 +27,7 @@ public abstract class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
+
+    @OneToMany(mappedBy = "user")
+    private List<Biglietto> biglietti;
 }
