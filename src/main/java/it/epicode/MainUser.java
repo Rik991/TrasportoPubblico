@@ -107,11 +107,28 @@ public class MainUser {
                         System.out.println("Inserire numero di tessera!");
                         int numeroTessera = scanner.nextInt();
                         scanner.nextLine();
+                        Tessera tessera = tesseraDAO.findTessera(numeroTessera);
                         if (tesseraDAO.checkTessera(numeroTessera)) {
                             throw new TesseraNotFoundException("Tessera non trovata!");
+                        }else if(tesseraDAO.findTessera(numeroTessera).getDataScadenza().isBefore(LocalDate.now())){
+                            System.out.println("Tessera scaduta! Vuoi rinnovarla? si/no");
+                            String sceltaRinnovoTessera = scanner.nextLine().toLowerCase();
+                            switch (sceltaRinnovoTessera){
+                                case "si":
+                                    tessera.setDataScadenza(tessera.getDataScadenza().plusYears(1));
+                                    tesseraDAO.update(tessera);
+                                    System.out.println("Tessera aggiornata con successo, nuova scadenza: " + tessera.getDataScadenza());
+                                    System.out.println();
+                                    break;
+                                case "no":
+                                    System.out.println("Grazie per aver scelto il trasporto pubblico,\nle ricordiamo che può comunque acquistare un biglietto per viaggiare senza tessera!");
+                                    System.out.println();
+                                    break;
+                                default:
+                                    throw new InputMismatchException("Per favore inserire soltanto si o no!");
+                            }
                         }
 
-                        Tessera tessera = tesseraDAO.findTessera(numeroTessera);
                         if (tesseraDAO.checkRuolo(tessera)) {
                             System.out.println("Buongiorno Amministratore: " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
 
@@ -255,6 +272,12 @@ public class MainUser {
                             System.out.println("Hai selezionato la tratta: " + tratte.get(trattaScelta).getZonaPartenza() + " a " + tratte.get(trattaScelta).getZonaArrivo());
                             System.out.println("il viaggio durerà circa " + tratte.get(trattaScelta).getDurataEffettiva() + " minuti");
 
+
+                            if (tessera.getDataScadenza().isBefore(LocalDate.now())){
+                                System.out.println("Devi prima rinnovare la tua tessera!");
+                                break;
+                            }
+
                             if (abbonamentoDAO.checkAbbonamento(tessera)) {
                                 if (abbonamentoDAO.findAbbonamentoByTessera(tessera).getDataScadenza().isBefore(LocalDate.now())) {
                                     System.out.println("Il tuo abbonamento è scaduto");
@@ -299,7 +322,7 @@ public class MainUser {
                                     User user = tessera.getUser();
                                     List<Biglietto> bigliettiUtente = user.getBiglietti().stream()
                                             .filter(biglietto -> !biglietto.isVidimato())
-                                            .filter(biglietto -> biglietto.getTratta().equals(trattaDAO.findById(1L))).toList();
+                                            .filter(biglietto -> biglietto.getTratta().equals(trattaDAO.findById((long) trattaScelta + 1))).toList();
                                     if (bigliettiUtente.size() <= 0) {
                                         throw new TicketEx("Nessun biglietto disponibile!");
                                     }
@@ -331,7 +354,7 @@ public class MainUser {
                                         String partenza = scanner.nextLine().toLowerCase();
                                         if (partenza.equals("si")) {
                                             bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
-                                            System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
+                                            System.out.println("Biglietto vidimato con successo, buon viaggio!");
                                             return;
                                         } else if (partenza.equals("no")) {
                                             System.out.println("Grazie per aver scelto il trasporto pubblico!");
@@ -387,7 +410,8 @@ public class MainUser {
                                 scanner.nextLine();
                                 Biglietto bigliettoScelto = bigliettoDAO.findById(sceltaBiglietto);
                                 bigliettoDAO.vidimaBiglietto(bigliettoScelto, tratta);
-                                break;
+                                System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                return;
                             case 2:
                                 System.out.println("Inserisci il tuo userID per completare l'acquisto");
                                 userID = scanner.nextLong();
@@ -418,7 +442,7 @@ public class MainUser {
                                     String partenza = scanner.nextLine().toLowerCase();
                                     if (partenza.equals("si")) {
                                         bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
-                                        System.out.println("Biglietto vidimato con successo. \nBuon viaggio!");
+                                        System.out.println("Biglietto vidimato con successo, buon viaggio!");
                                         return;
                                     } else if (partenza.equals("no")) {
                                         System.out.println("Grazie per aver scelto il trasporto pubblico!");
@@ -426,8 +450,6 @@ public class MainUser {
                                     } else {
                                         throw new InputMismatchException("Errore d'inserimento, per favore digitare si o no!");
                                     }
-
-
                                 }
                                 break;
                             case 3:
@@ -453,14 +475,12 @@ public class MainUser {
 
                 }
 
-                //rinnovaTessera, se scaduta chiedere di rinnovarla
                 //amministratore deve vedere statistiche biglietti e statistiche mezzi (tempo in servizio )
 
 
             } catch (VenditoreException | TrattaException | TesseraNotFoundException | InputMismatchException |
                      IllegalArgumentException | TicketEx e) {
                 LOGGER.error(e::getMessage);
-
             }
 
             System.out.print("Hai bisogno di altro? (si/no): ");
