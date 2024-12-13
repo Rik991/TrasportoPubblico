@@ -4,6 +4,7 @@ import it.epicode.entity.biglietteria.*;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -61,5 +62,18 @@ public class VenditaDAO {
                 .setParameter("vendita", venditore)
                 .getResultList();
     }
+
+    //cerchiamo abbonamenti TRA due date scelte
+    public List<Abbonamento> findAbbonamentiByDate(LocalDate dataInizio, LocalDate dataFine, Vendita venditore) {
+        return em.createQuery("SELECT a FROM Abbonamento a " +
+                        "WHERE a.vendita = :vendita AND a.dataEmissione " +
+                        "BETWEEN :dataInizio AND :dataFine", Abbonamento.class)
+                .setParameter("vendita", venditore)
+                .setParameter("dataInizio", dataInizio)
+                .setParameter("dataFine", dataFine)
+                .getResultList();
+    }
+
+
 
 }
