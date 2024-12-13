@@ -137,7 +137,7 @@ public class MainUser {
                             scanner.nextLine();
                             switch (sceltaAmministratore) {
                                 case 1:
-                                    System.out.println("Cosa vuoi fare? 1- Aggiorna stato servizio mezzo \n2- Dichiara ritardo \n3- Esci");
+                                    System.out.println("Cosa vuoi fare? \n1- Aggiorna stato servizio mezzo \n2- Dichiara ritardo \n3- Esci");
                                     int sceltaAmministratoreGestioneTratta = scanner.nextInt();
                                     switch (sceltaAmministratoreGestioneTratta) {
                                         case 1:
