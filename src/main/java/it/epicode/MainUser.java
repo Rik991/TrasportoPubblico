@@ -109,7 +109,7 @@ public class MainUser {
                             throw new TesseraNotFoundException("Tessera non trovata!");
                         } else if (tesseraDAO.findTessera(numeroTessera).getDataScadenza().isBefore(LocalDate.now())) {
                             tessera = tesseraDAO.findTessera(numeroTessera);
-                            System.out.println("Tessera scaduta! Vuoi rinnovarla?  ");
+                            System.out.println("Tessera scaduta! Vuoi rinnovarla? si/no");
                             String sceltaRinnovoTessera = scanner.nextLine().toLowerCase();
                             switch (sceltaRinnovoTessera) {
                                 case "si":
