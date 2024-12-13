@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "distributori_automatici")
-@NamedQuery(name = "Trova_tutto_DistributoreAutomatico", query = "SELECT a FROM DistributoreAutomatico a")
+@NamedQuery(name = "Trova_tutto_DistributoreAutomatico", query = "SELECT a FROM DistributoreAutomatico a ORDER BY a.id")
 public class DistributoreAutomatico extends Vendita {
 
     @Column(name = "in_servizio", nullable = false)

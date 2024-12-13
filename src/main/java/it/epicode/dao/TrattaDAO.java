@@ -2,6 +2,7 @@ package it.epicode.dao;
 
 import it.epicode.entity.biglietteria.Tratta;
 import it.epicode.entity.parco_mezzi.Autobus;
+import it.epicode.entity.parco_mezzi.ParcoMezzi;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
@@ -46,5 +47,11 @@ public class TrattaDAO {
         nuovoAutobus.setInServizio(inServizio);
         em.persist(nuovoAutobus);
         em.getTransaction().commit();
+    }
+
+    public ParcoMezzi findMezzoByTratta(Tratta tratta){
+        return em.createQuery("SELECT p FROM ParcoMezzi p WHERE p.tratta = :tratta", ParcoMezzi.class)
+                .setParameter("tratta", tratta)
+                .getSingleResult();
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "rivenditori")
-@NamedQuery(name = "Trova_tutto_Rivenditore", query = "SELECT a FROM Rivenditore a")
+@NamedQuery(name = "Trova_tutto_Rivenditore", query = "SELECT a FROM Rivenditore a ORDER BY a.id")
 public class Rivenditore extends Vendita{
 
 }

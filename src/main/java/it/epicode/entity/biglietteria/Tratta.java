@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "tratte")
-@NamedQuery(name = "Trova_tutto_Tratta", query = "SELECT a FROM Tratta a")
+@NamedQuery(name = "Trova_tutto_Tratta", query = "SELECT a FROM Tratta a ORDER BY a.id")
 public class Tratta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +40,7 @@ public class Tratta {
 
     @Column(name = "numero_viaggi")
     private int numeroViaggi = 0;
+
+    @Column(name = "numero_biglietti_vidimati", nullable = false)
+    private int numeroBigliettiVidimati = 0;
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "vendite")
-@NamedQuery(name = "Trova_tutto_Vendita", query = "SELECT v FROM Vendita v ORDER BY v.id")
+@NamedQuery(name = "Trova_tutto_Vendita", query = "SELECT v FROM Vendita v")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Vendita {
     @Id

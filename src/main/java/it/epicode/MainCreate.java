@@ -107,7 +107,6 @@ public class MainCreate {
         autobus1.setLinea("A1");
         autobus1.setTempoInServizio(LocalTime.of(8, 0));
         autobus1.setTempoInManutenzione(LocalTime.of(0, 0));
-        autobus1.setNumeroBigliettiVidimati(40);
         autobus1.setTotaleTratteEffettuate(1);
         parcoMezziDAO.save(autobus1);
 
@@ -116,7 +115,6 @@ public class MainCreate {
         autobus2.setLinea("A2");
         autobus2.setTempoInServizio(LocalTime.of(0, 0));
         autobus2.setTempoInManutenzione(LocalTime.of(23, 0));
-        autobus2.setNumeroBigliettiVidimati(0);
         autobus2.setTotaleTratteEffettuate(0);
         parcoMezziDAO.save(autobus2);
 
@@ -125,7 +123,6 @@ public class MainCreate {
         autobus3.setLinea("A3");
         autobus3.setTempoInServizio(LocalTime.of(23, 0));
         autobus3.setTempoInManutenzione(LocalTime.of(0, 0));
-        autobus3.setNumeroBigliettiVidimati(0);
         autobus3.setTotaleTratteEffettuate(0);
         parcoMezziDAO.save(autobus3);
 
@@ -134,7 +131,6 @@ public class MainCreate {
         tram1.setLinea("T1");
         tram1.setTempoInServizio(LocalTime.of(18, 0));
         tram1.setTempoInManutenzione(LocalTime.of(0, 0));
-        tram1.setNumeroBigliettiVidimati(40);
         tram1.setTotaleTratteEffettuate(2);
         parcoMezziDAO.save(tram1);
 
@@ -143,7 +139,6 @@ public class MainCreate {
         tram2.setLinea("T2");
         tram2.setTempoInServizio(LocalTime.of(0, 0));
         tram2.setTempoInManutenzione(LocalTime.of(23, 0));
-        tram2.setNumeroBigliettiVidimati(0);
         tram2.setTotaleTratteEffettuate(0);
         parcoMezziDAO.save(tram2);
 
@@ -152,7 +147,6 @@ public class MainCreate {
         tram3.setLinea("T3");
         tram3.setTempoInServizio(LocalTime.of(10, 0));
         tram3.setTempoInManutenzione(LocalTime.of(0, 0));
-        tram3.setNumeroBigliettiVidimati(0);
         tram3.setTotaleTratteEffettuate(0);
         parcoMezziDAO.save(tram3);
 

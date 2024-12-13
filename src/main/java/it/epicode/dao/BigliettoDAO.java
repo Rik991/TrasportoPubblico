@@ -68,19 +68,14 @@ public class BigliettoDAO {
         }
         em.getTransaction().begin();
         biglietto.setVidimato(true);
+        biglietto.getTratta().setNumeroBigliettiVidimati(biglietto.getTratta().getNumeroBigliettiVidimati() + 1);
         biglietto.setTratta(tratta);
         biglietto.setDataVidimazione(LocalDateTime.now());
         em.merge(biglietto);
         em.getTransaction().commit();
     }
 
-    public int contaBigliettiVidimatiPerMezzo(Long mezzoId) {
-        return em.createQuery(
-                        "SELECT COUNT(b) FROM Biglietto b WHERE b.mezzo.id = :mezzoId", Long.class)
-                .setParameter("mezzoId", mezzoId)
-                .getSingleResult()
-                .intValue();
-    }
+
 
     public int contaBigliettiVidimatiInPeriodo(Long mezzoId, LocalDateTime inizio, LocalDateTime fine) {
         return em.createQuery(

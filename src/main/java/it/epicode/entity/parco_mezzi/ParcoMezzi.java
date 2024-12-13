@@ -30,9 +30,6 @@ public abstract class ParcoMezzi {
     @Column(name = "tempo_in_manutenzione", nullable = false)
     private LocalTime tempoInManutenzione;
 
-    @Column(name = "numero_biglietti_vidimati", nullable = false)
-    private int numeroBigliettiVidimati = 0;
-
     @Column(name = "totale_tratte_effettuate", nullable = false)
     private int totaleTratteEffettuate = 0;
 

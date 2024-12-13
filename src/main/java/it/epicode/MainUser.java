@@ -58,9 +58,10 @@ public class MainUser {
             List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributori();
             System.out.println("Seleziona il distributore:");
             for (int i = 0; i < distributori.size(); i++) {
-                System.out.println((i + 1) + ". Distributore " + (distributori.get(i).getId() - 1));
+                System.out.println(distributori.get(i).getId() + ". Distributore " + distributori.get(i).getId() );
             }
-            int distributoreScelto = scanner.nextInt() - 1;
+            int distributoreScelto = scanner.nextInt();
+            //TODO SISTEMA INDEX DISTRIBUTORE!
             scanner.nextLine();
             if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
                 if (distributori.get(distributoreScelto).isInServizio()) {
@@ -132,7 +133,7 @@ public class MainUser {
                         if (tesseraDAO.checkRuolo(tessera)) {
                             System.out.println("Buongiorno Amministratore: " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
 
-                            System.out.println("1-Gestisci tratte e linee \n2-Controllo Mezzi \n3-Statistiche venditori");
+                            System.out.println("1-Gestisci tratte e linee \n2-Controllo Mezzi \n3-Statistiche vendite e vidimazione biglietti");
 
                             int sceltaAmministratore = scanner.nextInt();
                             scanner.nextLine();
@@ -231,10 +232,11 @@ public class MainUser {
                                     break;
                                 case 3:
                                     System.out.println("Contralla statistiche vendite!");
-                                    System.out.println("1- Totale biglietti/abbonamenti venduti dal venditore \n2- Abbonamenti venduti in un periodo di tempo da un venditore");
+                                    System.out.println("1- Totale biglietti/abbonamenti venduti dal venditore \n2- Abbonamenti venduti in un periodo di tempo da un venditore" +
+                                            "\n3- Totale biglietti vidimati su un mezzo \n4- Totale biglietti vidimati in un periodo di tempo");
                                     int sceltaStatistiche = scanner.nextInt();
                                     scanner.nextLine();
-                                    switch(sceltaStatistiche){
+                                    switch (sceltaStatistiche) {
                                         case 1:
                                             List<Vendita> venditori = venditaDAO.findAll();
                                             System.out.println("Lista venditori");
@@ -266,9 +268,23 @@ public class MainUser {
                                             LocalDate dataInizio = LocalDate.parse(scanner.nextLine());
                                             System.out.println("Inserisci la data di fine: ");
                                             LocalDate dataFine = LocalDate.parse(scanner.nextLine());
-                                            List<Abbonamento> abbonamentiVendutiTra = venditaDAO.findAbbonamentiByDate(dataInizio, dataFine, venditoreScelto );
+                                            List<Abbonamento> abbonamentiVendutiTra = venditaDAO.findAbbonamentiByDate(dataInizio, dataFine, venditoreScelto);
                                             System.out.println("Abbonamenti venduti tra " + dataInizio + " e " + dataFine + " : " + abbonamentiVendutiTra.size());
                                             continue;
+                                        case 3://Totale biglietti vidimati su un mezzo
+                                            mezzi = parcoMezziDAO.findAll();
+                                            System.out.println("Lista mezzi: ");
+                                            for (int i = 0; i < parcoMezziDAO.findAll().size(); i++) {
+                                                System.out.println((i + 1) + " " + mezzi.get(i).getLinea());
+                                            }
+                                            System.out.println("Scegli il mezzo da controllare");
+                                            sceltaMezzo = scanner.nextLong();
+                                            scanner.nextLine();
+                                            mezzoScelto = parcoMezziDAO.findById(sceltaMezzo);
+                                            System.out.println("Totale biglietti vidimati sul mezzo " + mezzoScelto.getLinea() + ": " +  mezzoScelto.getTratta().getNumeroBigliettiVidimati());
+                                            break;
+                                        case 4://Totale biglietti vidimati in un periodo di tempo
+                                            break;
                                         default:
                                             throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
                                     }
@@ -284,7 +300,7 @@ public class MainUser {
 
                             System.out.println("Seleziona la tratta:");
                             for (int i = 0; i < tratte.size(); i++) {
-                                System.out.println((i + 1) + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
+                                System.out.println(tratte.get(i).getId() + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
                             }
                             int trattaScelta = scanner.nextInt() - 1;
                             scanner.nextLine();
@@ -327,7 +343,11 @@ public class MainUser {
                                         throw new InputMismatchException("Errore d'inserimento, digita si o no!");
                                     }
                                 } else {
-                                    System.out.println("Hai già un abbonamento valido! Buon Viaggio");
+                                    if (trattaDAO.findMezzoByTratta(tratte.get(trattaScelta)).isInServizio()) {
+                                        System.out.println("Hai già un abbonamento valido! Buon Viaggio");
+                                        return;
+                                    }
+                                    System.out.println("Ci scusiamo per l'inconveniente, il mezzo non è in servizio!");
                                     return;
                                 }
                             }
@@ -353,7 +373,15 @@ public class MainUser {
                                     Long sceltaBiglietto = scanner.nextLong();
                                     scanner.nextLine();
                                     Biglietto bigliettoScelto = bigliettoDAO.findById(sceltaBiglietto);
-                                    bigliettoDAO.vidimaBiglietto(bigliettoScelto, tratta);
+                                    if (trattaDAO.findMezzoByTratta(bigliettoScelto.getTratta()).isInServizio()) {
+                                        bigliettoDAO.vidimaBiglietto(bigliettoScelto, bigliettoScelto.getTratta());
+
+                                        System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                    } else {
+                                        System.out.println("Ci scusiamo per l'inconveniente, il mezzo non è in servizio!");
+                                    }
+
+
                                     break;
 
                                 case 2:
@@ -372,8 +400,12 @@ public class MainUser {
                                         System.out.println("Vuoi partire adesso? (si/no)");
                                         String partenza = scanner.nextLine().toLowerCase();
                                         if (partenza.equals("si")) {
-                                            bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
-                                            System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                            if (trattaDAO.findMezzoByTratta(tratta).isInServizio()) {
+                                                bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), user.getBiglietti().getLast().getTratta());
+                                                System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                            } else {
+                                                System.out.println("Ci scusiamo per l'inconveniente, il mezzo non è in servizio!");
+                                            }
                                             return;
                                         } else if (partenza.equals("no")) {
                                             System.out.println("Grazie per aver scelto il trasporto pubblico!");
@@ -428,8 +460,12 @@ public class MainUser {
                                 Long sceltaBiglietto = scanner.nextLong();
                                 scanner.nextLine();
                                 Biglietto bigliettoScelto = bigliettoDAO.findById(sceltaBiglietto);
-                                bigliettoDAO.vidimaBiglietto(bigliettoScelto, tratta);
-                                System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                if (trattaDAO.findMezzoByTratta(bigliettoScelto.getTratta()).isInServizio()) {
+                                    bigliettoDAO.vidimaBiglietto(bigliettoScelto, bigliettoScelto.getTratta());
+                                    System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                } else {
+                                    System.out.println("Ci scusiamo per l'inconveniente, il mezzo non è in servizio!");
+                                }
                                 return;
                             case 2:
                                 System.out.println("Inserisci il tuo userID per completare l'acquisto");
@@ -441,7 +477,7 @@ public class MainUser {
                                 tratte = trattaDAO.findAll();//forse superflua
                                 System.out.println("Seleziona la tratta:");
                                 for (int i = 0; i < tratte.size(); i++) {
-                                    System.out.println((i + 1) + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
+                                    System.out.println(tratte.get(i).getId() + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
                                 }
                                 int trattaScelta = scanner.nextInt() - 1;
                                 scanner.nextLine();
@@ -460,8 +496,12 @@ public class MainUser {
                                     System.out.println("Vuoi partire adesso? (si/no)");
                                     String partenza = scanner.nextLine().toLowerCase();
                                     if (partenza.equals("si")) {
-                                        bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), tratta);
-                                        System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                        if (trattaDAO.findMezzoByTratta(tratta).isInServizio()) {
+                                            bigliettoDAO.vidimaBiglietto(user.getBiglietti().getLast(), user.getBiglietti().getLast().getTratta());
+                                            System.out.println("Biglietto vidimato con successo, buon viaggio!");
+                                        } else {
+                                            System.out.println("Ci scusiamo per l'inconveniente, il mezzo non è in servizio!");
+                                        }
                                         return;
                                     } else if (partenza.equals("no")) {
                                         System.out.println("Grazie per aver scelto il trasporto pubblico!");
