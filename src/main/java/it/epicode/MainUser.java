@@ -42,7 +42,7 @@ public class MainUser {
             List<Rivenditore> rivenditori = venditaDAO.findAllRivenditori();
             System.out.println("Seleziona il Rivenditore: ");
             for (int i = 0; i < rivenditori.size(); i++) {
-                System.out.println((i + 1) + " Rivenditore " + rivenditori.get(i).getNome());
+                System.out.println((i + 1) + "- Rivenditore " + rivenditori.get(i).getNome());
             }
             int rivenditoreScelto = scanner.nextInt() - 1;
             scanner.nextLine();
@@ -55,7 +55,7 @@ public class MainUser {
             List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributori();
             System.out.println("Seleziona il distributore:");
             for (int i = 0; i < distributori.size(); i++) {
-                System.out.println((i + 1) + " " + distributori.get(i).getNome());
+                System.out.println((i + 1) + "- " + distributori.get(i).getNome());
             }
             int distributoreScelto = scanner.nextInt() - 1;
             scanner.nextLine();
@@ -92,7 +92,7 @@ public class MainUser {
 
         while (esecuzione) {
             try {
-                System.out.println("Buongiorno,\n1- Inserisci numero di tessera \n2- Non ho la tessera");
+                System.out.println("Buongiorno \n1- Inserisci numero di tessera \n2- Non ho la tessera");
                 int scelta = scanner.nextInt();
                 scanner.nextLine();
                 Vendita venditore = null;
@@ -310,7 +310,7 @@ public class MainUser {
                             int trattaScelta = scanner.nextInt() - 1;
                             scanner.nextLine();
                             System.out.println("Hai selezionato la tratta: " + tratte.get(trattaScelta).getZonaPartenza() + " a " + tratte.get(trattaScelta).getZonaArrivo());
-                            System.out.println("il viaggio durerà circa " + tratte.get(trattaScelta).getDurataEffettiva() + " minuti");
+                            System.out.println("il viaggio durerà circa: " + tratte.get(trattaScelta).getDurataEffettiva() + " minuti");
 
 
                             if (tessera.getDataScadenza().isBefore(LocalDate.now())) {
@@ -520,7 +520,7 @@ public class MainUser {
                                 scanner.nextLine();
                                 User userWithoutT = userDAO.findById(userId);
 
-                                System.out.println("Dove vuoi acquistarla? \n1- Per rivenditore \n2 Per distributore");
+                                System.out.println("Dove vuoi acquistarla? \n1- Per rivenditore \n2- Per distributore");
                                 int acquistoTessera = scanner.nextInt();
                                 scanner.nextLine();
 
