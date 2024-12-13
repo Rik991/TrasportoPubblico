@@ -177,12 +177,12 @@ public class MainUser {
                                             }
                                         case 2:
                                             List<ParcoMezzi> mezziInViaggio = parcoMezziDAO.findAll();
-                                            System.out.println("Su quale mezzo stai viaggiando? 1- Autobus \n2- Tram?");
+                                            System.out.println("Su quale mezzo stai viaggiando? \n1- Autobus \n2- Tram?");
                                             int tipoMezzoScelto = scanner.nextInt();
                                             scanner.nextLine();
-                                            if (tipoMezzoScelto == 1) {//autobus
+                                            if (tipoMezzoScelto == 1) {
                                                 parcoMezziDAO.isAutobusOrTram(mezziInViaggio, tipoMezzoScelto);
-                                            } else if (tipoMezzoScelto == 2) {//tram
+                                            } else if (tipoMezzoScelto == 2) {
                                                 parcoMezziDAO.isAutobusOrTram(mezziInViaggio, tipoMezzoScelto);
                                             } else {
                                                 throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
@@ -195,14 +195,21 @@ public class MainUser {
                                                     + "\nArrivo previsto alle: " + mezzoScelto.getTratta().getOraDiArrivo());
                                             System.out.println("C'è traffico? si/no");
                                             String traffico = scanner.nextLine();
-                                            if (traffico == "si") {
-                                                System.out.println("Inserisci i minuti di ritardo: ");
-                                                int ritardo = scanner.nextInt();
-                                                scanner.nextLine();
-                                                mezzoScelto.viaggia(mezzoScelto, ritardo);
-                                                System.out.println("Durata effettiva: " + mezzoScelto.getTratta().getDurataEffettiva().plusMinutes(ritardo)
-                                                        + " \nArrivo previsto alle: " + mezzoScelto.getTratta().getOraDiArrivo().plusMinutes(ritardo));
-                                                System.out.println("Segnalazione avvenuta correttamente.");
+                                            switch (traffico) {
+                                                case "si":
+                                                    System.out.println("Inserisci i minuti di ritardo: ");
+                                                    int ritardo = scanner.nextInt();
+                                                    scanner.nextLine();
+                                                    mezzoScelto.viaggia(mezzoScelto, ritardo);
+                                                    System.out.println("Durata effettiva: " + mezzoScelto.getTratta().getDurataEffettiva().plusMinutes(ritardo)
+                                                            + " \nArrivo previsto alle: " + mezzoScelto.getTratta().getOraDiArrivo().plusMinutes(ritardo));
+                                                    System.out.println("Segnalazione avvenuta correttamente.");
+                                                    System.out.println();
+                                                    continue;
+                                                case "no":
+                                                    System.out.println("Grazie, buon lavoro!");
+                                                    continue;
+
                                             }
                                         case 3:
                                             System.out.println("Arrivederci e buon lavoro!");
@@ -538,8 +545,10 @@ public class MainUser {
                 }
 
 
-            } catch (VenditoreException | TrattaException | TesseraNotFoundException | TicketNotFoundException | InputMismatchException |
-                     IllegalArgumentException e) {
+            } catch
+            (VenditoreException | TrattaException | TesseraNotFoundException | TicketNotFoundException |
+             InputMismatchException |
+             IllegalArgumentException e) {
                 LOGGER.error(e::getMessage);
             }
 
