@@ -6,17 +6,13 @@ import it.epicode.entity.exceptions.TesseraNotFoundException;
 import it.epicode.entity.exceptions.TicketEx;
 import it.epicode.entity.exceptions.TrattaException;
 import it.epicode.entity.exceptions.VenditoreException;
-import it.epicode.entity.parco_mezzi.Autobus;
 import it.epicode.entity.parco_mezzi.ParcoMezzi;
-import it.epicode.entity.parco_mezzi.Tram;
 import it.epicode.entity.user.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
-
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.InputMismatchException;
@@ -58,7 +54,7 @@ public class MainUser {
             List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributori();
             System.out.println("Seleziona il distributore:");
             for (int i = 0; i < distributori.size(); i++) {
-                System.out.println((i+1) + " " + distributori.get(i).getNome());
+                System.out.println((i + 1) + " " + distributori.get(i).getNome());
             }
             int distributoreScelto = scanner.nextInt() - 1;
             scanner.nextLine();
@@ -283,9 +279,16 @@ public class MainUser {
                                             scanner.nextLine();
                                             mezzoScelto = parcoMezziDAO.findById(sceltaMezzo);
                                             System.out.println("Totale biglietti vidimati sul mezzo " + mezzoScelto.getLinea() + ": " + mezzoScelto.getTratta().getNumeroBigliettiVidimati());
-                                            break;
+                                            continue;
                                         case 4://Totale biglietti vidimati in un periodo di tempo
-                                            break;
+                                            System.out.println("Inserisci il periodo da controllare: YYYY-MM-DD");
+                                            System.out.println("Inserisci la data di inizio: ");
+                                            dataInizio = LocalDate.parse(scanner.nextLine());
+                                            System.out.println("Inserisci la data di fine: ");
+                                            dataFine = LocalDate.parse(scanner.nextLine());
+                                            List<Biglietto> listaTotaleBigliettiVidimati = bigliettoDAO.findBigliettiVidimatiByDate(dataInizio, dataFine);
+                                            System.out.println("Totale biglietti vidimati: " + listaTotaleBigliettiVidimati.size());
+                                            continue;
                                         default:
                                             throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
                                     }

@@ -3,13 +3,13 @@ package it.epicode.dao;
 import it.epicode.entity.biglietteria.Biglietto;
 import it.epicode.entity.biglietteria.Tratta;
 import it.epicode.entity.biglietteria.Vendita;
-import it.epicode.entity.parco_mezzi.ParcoMezzi;
+
 import it.epicode.entity.user.User;
-import jakarta.persistence.Entity;
+
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -70,22 +70,18 @@ public class BigliettoDAO {
         biglietto.setVidimato(true);
         biglietto.getTratta().setNumeroBigliettiVidimati(biglietto.getTratta().getNumeroBigliettiVidimati() + 1);
         biglietto.setTratta(tratta);
-        biglietto.setDataVidimazione(LocalDateTime.now());
+        biglietto.setDataVidimazione(LocalDate.now());
         em.merge(biglietto);
         em.getTransaction().commit();
     }
 
-
-
-    public int contaBigliettiVidimatiInPeriodo(Long mezzoId, LocalDateTime inizio, LocalDateTime fine) {
-        return em.createQuery(
-                        "SELECT COUNT(b) FROM Biglietto b WHERE b.mezzo.id = :mezzoId AND b.dataVidimazione BETWEEN :inizio AND :fine",
-                        Long.class)
-                .setParameter("mezzoId", mezzoId)
-                .setParameter("inizio", inizio)
-                .setParameter("fine", fine)
-                .getSingleResult()
-                .intValue();
+    public List<Biglietto> findBigliettiVidimatiByDate(LocalDate dataInizio, LocalDate dataFine) {
+        return em.createQuery("SELECT b FROM Biglietto b " +
+                        "WHERE b.dataVidimazione " +
+                        "BETWEEN :dataInizio AND :dataFine", Biglietto.class)
+                .setParameter("dataInizio", dataInizio)
+                .setParameter("dataFine", dataFine)
+                .getResultList();
     }
 
 }

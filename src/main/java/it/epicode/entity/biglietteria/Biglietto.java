@@ -4,7 +4,7 @@ import it.epicode.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -27,7 +27,7 @@ public class Biglietto {
     private Tratta tratta;
 
     @Column(name = "data_vidimazione")
-    private LocalDateTime dataVidimazione; // Timestamp della vidimazione
+    private LocalDate dataVidimazione;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
