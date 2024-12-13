@@ -3,7 +3,7 @@ package it.epicode;
 import it.epicode.dao.*;
 import it.epicode.entity.biglietteria.*;
 import it.epicode.entity.exceptions.TesseraNotFoundException;
-import it.epicode.entity.exceptions.TicketEx;
+import it.epicode.entity.exceptions.TicketNotFoundException;
 import it.epicode.entity.exceptions.TrattaException;
 import it.epicode.entity.exceptions.VenditoreException;
 import it.epicode.entity.parco_mezzi.ParcoMezzi;
@@ -368,7 +368,7 @@ public class MainUser {
                                             .filter(biglietto -> !biglietto.isVidimato())
                                             .filter(biglietto -> biglietto.getTratta().equals(trattaDAO.findById((long) trattaScelta + 1))).toList();
                                     if (bigliettiUtente.size() <= 0) {
-                                        throw new TicketEx("Nessun biglietto disponibile!");
+                                        throw new TicketNotFoundException("Nessun biglietto disponibile!");
                                     }
                                     System.out.println("I tuoi biglietti: ");
                                     for (int i = 0; i < bigliettiUtente.size(); i++) {
@@ -452,7 +452,7 @@ public class MainUser {
                                 List<Biglietto> bigliettiUtente = user.getBiglietti().stream()
                                         .filter(biglietto -> !biglietto.isVidimato()).toList();
                                 if (bigliettiUtente.size() <= 0) {
-                                    throw new TicketEx("Nessun biglietto disponibile!");
+                                    throw new TicketNotFoundException("Nessun biglietto disponibile!");
 
                                 }
                                 System.out.println("I tuoi biglietti: ");
@@ -538,8 +538,8 @@ public class MainUser {
                 }
 
 
-            } catch (VenditoreException | TrattaException | TesseraNotFoundException | InputMismatchException |
-                     IllegalArgumentException | TicketEx e) {
+            } catch (VenditoreException | TrattaException | TesseraNotFoundException | TicketNotFoundException | InputMismatchException |
+                     IllegalArgumentException e) {
                 LOGGER.error(e::getMessage);
             }
 
