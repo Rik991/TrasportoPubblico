@@ -13,6 +13,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.InputMismatchException;
@@ -39,7 +40,7 @@ public class MainUser {
 
         if (numero == 1) {
             List<Rivenditore> rivenditori = venditaDAO.findAllRivenditori();
-            System.out.println("Seleziona il Rivenditore:");
+            System.out.println("Seleziona il Rivenditore: ");
             for (int i = 0; i < rivenditori.size(); i++) {
                 System.out.println((i + 1) + " Rivenditore " + rivenditori.get(i).getNome());
             }
@@ -91,7 +92,7 @@ public class MainUser {
 
         while (esecuzione) {
             try {
-                System.out.println("Buongiorno, 1- Inserisci numero di tessera, 2- Non ho la tessera");
+                System.out.println("Buongiorno,\n1- Inserisci numero di tessera \n2- Non ho la tessera");
                 int scelta = scanner.nextInt();
                 scanner.nextLine();
                 Vendita venditore = null;
@@ -108,7 +109,7 @@ public class MainUser {
                             throw new TesseraNotFoundException("Tessera non trovata!");
                         } else if (tesseraDAO.findTessera(numeroTessera).getDataScadenza().isBefore(LocalDate.now())) {
                             tessera = tesseraDAO.findTessera(numeroTessera);
-                            System.out.println("Tessera scaduta! Vuoi rinnovarla? si/no");
+                            System.out.println("Tessera scaduta! Vuoi rinnovarla?  ");
                             String sceltaRinnovoTessera = scanner.nextLine().toLowerCase();
                             switch (sceltaRinnovoTessera) {
                                 case "si":
@@ -130,13 +131,13 @@ public class MainUser {
                         if (tesseraDAO.checkRuolo(tessera)) {
                             System.out.println("Buongiorno Amministratore: " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
 
-                            System.out.println("1-Gestisci tratte e linee \n2-Controllo Mezzi \n3-Statistiche vendite e vidimazione biglietti");
+                            System.out.println("1- Gestisci tratte e linee \n2- Controllo Mezzi \n3- Statistiche vendite e vidimazione biglietti");
 
                             int sceltaAmministratore = scanner.nextInt();
                             scanner.nextLine();
                             switch (sceltaAmministratore) {
                                 case 1:
-                                    System.out.println("Cosa vuoi fare? 1. Aggiorna stato servizio mezzo 2. Dichiara ritardo(in Viaggio) 3. Esci");
+                                    System.out.println("Cosa vuoi fare? 1- Aggiorna stato servizio mezzo \n2- Dichiara ritardo \n3- Esci");
                                     int sceltaAmministratoreGestioneTratta = scanner.nextInt();
                                     switch (sceltaAmministratoreGestioneTratta) {
                                         case 1:
@@ -176,7 +177,7 @@ public class MainUser {
                                             }
                                         case 2:
                                             List<ParcoMezzi> mezziInViaggio = parcoMezziDAO.findAll();
-                                            System.out.println("Su quale mezzo stai viaggiando? 1. Autobus o 2. Tram?");
+                                            System.out.println("Su quale mezzo stai viaggiando? 1- Autobus \n2- Tram?");
                                             int tipoMezzoScelto = scanner.nextInt();
                                             scanner.nextLine();
                                             if (tipoMezzoScelto == 1) {//autobus
@@ -190,11 +191,11 @@ public class MainUser {
                                             scanner.nextLine();
                                             mezzoScelto = parcoMezziDAO.findById(LineaScelta);
                                             System.out.println("Linea selezionata: " + mezzoScelto.getLinea());
-                                            System.out.println("Durata prevista: " + mezzoScelto.getTratta().getDurataEffettiva()
+                                            System.out.println("Durata: " + mezzoScelto.getTratta().getDurataEffettiva()
                                                     + "\nArrivo previsto alle: " + mezzoScelto.getTratta().getOraDiArrivo());
-                                            System.out.println("C'è traffico? Inserisci true o false");
-                                            boolean traffico = scanner.nextBoolean();
-                                            if (traffico) {
+                                            System.out.println("C'è traffico? si/no");
+                                            String traffico = scanner.nextLine();
+                                            if (traffico == "si") {
                                                 System.out.println("Inserisci i minuti di ritardo: ");
                                                 int ritardo = scanner.nextInt();
                                                 scanner.nextLine();
@@ -229,7 +230,7 @@ public class MainUser {
                                     break;
                                 case 3:
                                     System.out.println("Contralla statistiche vendite!");
-                                    System.out.println("1- Totale biglietti/abbonamenti venduti dal venditore \n2- Abbonamenti venduti in un periodo di tempo da un venditore" +
+                                    System.out.println("1- Totale biglietti/abbonamenti venduti da un venditore \n2- Abbonamenti venduti in un periodo di tempo da un venditore" +
                                             "\n3- Totale biglietti vidimati su un mezzo \n4- Totale biglietti vidimati in un periodo di tempo");
                                     int sceltaStatistiche = scanner.nextInt();
                                     scanner.nextLine();
@@ -287,7 +288,7 @@ public class MainUser {
                                             System.out.println("Inserisci la data di fine: ");
                                             dataFine = LocalDate.parse(scanner.nextLine());
                                             List<Biglietto> listaTotaleBigliettiVidimati = bigliettoDAO.findBigliettiVidimatiByDate(dataInizio, dataFine);
-                                            System.out.println("Totale biglietti vidimati: " + listaTotaleBigliettiVidimati.size());
+                                            System.out.println("Totale biglietti vidimati nel periodo inserito: " + listaTotaleBigliettiVidimati.size());
                                             continue;
                                         default:
                                             throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
@@ -302,9 +303,9 @@ public class MainUser {
                             System.out.println("Buongiorno " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
                             System.out.println("Dove vuoi andare?");
 
-                            System.out.println("Seleziona la tratta:");
+                            System.out.println("Seleziona la tratta: ");
                             for (int i = 0; i < tratte.size(); i++) {
-                                System.out.println(tratte.get(i).getId() + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
+                                System.out.println(tratte.get(i).getId() + "- Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
                             }
                             int trattaScelta = scanner.nextInt() - 1;
                             scanner.nextLine();
@@ -327,7 +328,7 @@ public class MainUser {
                                         System.out.println("Grazie per aver scelto il trasporto pubblico!");
                                         return;
                                     } else if (risposta.equals("si")) {
-                                        System.out.println("1- Settimanale, 2- Mensile");
+                                        System.out.println("1- Settimanale \n2- Mensile");
                                         int tipoAbbonamento = scanner.nextInt();
                                         scanner.nextLine();
                                         Abbonamento abbonamentoAggiornato = abbonamentoDAO.findAbbonamentoByTessera(tessera);
@@ -356,7 +357,7 @@ public class MainUser {
                                 }
                             }
 
-                            System.out.println("1-Ho già un biglietto, 2- per comprare un biglietto, 3- per comprare un abbonamento");
+                            System.out.println("1- Ho già un biglietto \n2- Acquista un biglietto \n3- Acquista un abbonamento");
                             int titoloDiViaggio = scanner.nextInt();
                             scanner.nextLine();
 
@@ -384,14 +385,12 @@ public class MainUser {
                                     } else {
                                         System.out.println("Ci scusiamo per l'inconveniente, il mezzo non è in servizio!");
                                     }
-
-
                                     break;
 
                                 case 2:
                                     user = tessera.getUser();
 
-                                    System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
+                                    System.out.println("Dove vuoi acquistarlo? \n1- Per rivenditore \n2- Per distributore");
                                     int acquistoBiglietto = scanner.nextInt();
                                     scanner.nextLine();
 
@@ -401,7 +400,7 @@ public class MainUser {
                                         bigliettoDAO.emettiBiglietto(venditore, tratta, user);
                                         System.out.println("Biglietto acquistato con successo!");
 
-                                        System.out.println("Vuoi partire adesso? (si/no)");
+                                        System.out.println("Vuoi partire adesso? si/no");
                                         String partenza = scanner.nextLine().toLowerCase();
                                         if (partenza.equals("si")) {
                                             if (trattaDAO.findMezzoByTratta(tratta).isInServizio()) {
@@ -421,7 +420,7 @@ public class MainUser {
                                     break;
 
                                 case 3:
-                                    System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
+                                    System.out.println("Dove vuoi acquistarlo? \n1- Per rivenditore \n2- Per distributore");
                                     int acquistoAbbonamento = scanner.nextInt();
                                     scanner.nextLine();
                                     System.out.println("1- Settimanale, 2- Mensile");
@@ -441,7 +440,7 @@ public class MainUser {
                         }
                         break;
                     case 2:
-                        System.out.println("1- Ho già un Biglietto\n2- Acquista un Biglietto\n3- Fai una tessera");
+                        System.out.println("1- Ho già un Biglietto \n2- Acquista un Biglietto \n3- Fai una tessera");
                         scelta = scanner.nextInt();
                         scanner.nextLine();
                         switch (scelta) {
@@ -479,16 +478,16 @@ public class MainUser {
 
                                 System.out.println("Dove vuoi andare?");
                                 tratte = trattaDAO.findAll();//forse superflua
-                                System.out.println("Seleziona la tratta:");
+                                System.out.println("Seleziona la tratta: ");
                                 for (int i = 0; i < tratte.size(); i++) {
-                                    System.out.println(tratte.get(i).getId() + ". Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
+                                    System.out.println(tratte.get(i).getId() + "- Da " + tratte.get(i).getZonaPartenza() + " a " + tratte.get(i).getZonaArrivo());
                                 }
                                 int trattaScelta = scanner.nextInt() - 1;
                                 scanner.nextLine();
                                 System.out.println("Hai selezionato la tratta: " + tratte.get(trattaScelta).getZonaPartenza() + " a " + tratte.get(trattaScelta).getZonaArrivo());
-                                System.out.println("il viaggio durerà circa " + tratte.get(trattaScelta).getDurataEffettiva() + " minuti");
+                                System.out.println("il viaggio durerà circa: " + tratte.get(trattaScelta).getDurataEffettiva() + " min");
 
-                                System.out.println("Dove vuoi acquistarlo? 1 per rivenditore, 2 per distributore");
+                                System.out.println("Dove vuoi acquistarlo? \n1- Per rivenditore \n2- Per distributore");
                                 int acquistoBiglietto = scanner.nextInt();
                                 scanner.nextLine();
 
@@ -497,7 +496,7 @@ public class MainUser {
                                 if ((venditore instanceof DistributoreAutomatico && ((DistributoreAutomatico) venditore).isInServizio()) || venditore instanceof Rivenditore) {
                                     bigliettoDAO.emettiBiglietto(venditore, tratta, user);
                                     System.out.println("Biglietto acquistato con successo!");
-                                    System.out.println("Vuoi partire adesso? (si/no)");
+                                    System.out.println("Vuoi partire adesso? si/no");
                                     String partenza = scanner.nextLine().toLowerCase();
                                     if (partenza.equals("si")) {
                                         if (trattaDAO.findMezzoByTratta(tratta).isInServizio()) {
@@ -521,7 +520,7 @@ public class MainUser {
                                 scanner.nextLine();
                                 User userWithoutT = userDAO.findById(userId);
 
-                                System.out.println("Dove vuoi acquistarla? 1 per rivenditore, 2 per distributore");
+                                System.out.println("Dove vuoi acquistarla? \n1- Per rivenditore \n2 Per distributore");
                                 int acquistoTessera = scanner.nextInt();
                                 scanner.nextLine();
 
@@ -544,7 +543,7 @@ public class MainUser {
                 LOGGER.error(e::getMessage);
             }
 
-            System.out.print("Hai bisogno di altro? (si/no): ");
+            System.out.print("Hai bisogno di altro? si/no: ");
             String risposta = scanner.nextLine().toLowerCase();
             if (risposta.equals("no")) {
                 System.out.println("Grazie per aver scelto il trasporto pubblico!");
