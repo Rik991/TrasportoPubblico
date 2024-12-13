@@ -45,7 +45,7 @@ public class MainUser {
             List<Rivenditore> rivenditori = venditaDAO.findAllRivenditori();
             System.out.println("Seleziona il Rivenditore:");
             for (int i = 0; i < rivenditori.size(); i++) {
-                System.out.println((i + 1) + ". Rivenditore " + rivenditori.get(i).getId());
+                System.out.println((i + 1) + " Rivenditore " + rivenditori.get(i).getNome());
             }
             int rivenditoreScelto = scanner.nextInt() - 1;
             scanner.nextLine();
@@ -58,10 +58,9 @@ public class MainUser {
             List<DistributoreAutomatico> distributori = venditaDAO.findAllDistributori();
             System.out.println("Seleziona il distributore:");
             for (int i = 0; i < distributori.size(); i++) {
-                System.out.println(distributori.get(i).getId() + ". Distributore " + distributori.get(i).getId() );
+                System.out.println((i+1) + " " + distributori.get(i).getNome());
             }
-            int distributoreScelto = scanner.nextInt();
-            //TODO SISTEMA INDEX DISTRIBUTORE!
+            int distributoreScelto = scanner.nextInt() - 1;
             scanner.nextLine();
             if (distributoreScelto >= 0 && distributoreScelto < distributori.size()) {
                 if (distributori.get(distributoreScelto).isInServizio()) {
@@ -108,10 +107,11 @@ public class MainUser {
                         System.out.println("Inserire numero di tessera!");
                         int numeroTessera = scanner.nextInt();
                         scanner.nextLine();
-                        Tessera tessera = tesseraDAO.findTessera(numeroTessera);
+                        Tessera tessera = null;
                         if (tesseraDAO.checkTessera(numeroTessera)) {
                             throw new TesseraNotFoundException("Tessera non trovata!");
                         } else if (tesseraDAO.findTessera(numeroTessera).getDataScadenza().isBefore(LocalDate.now())) {
+                            tessera = tesseraDAO.findTessera(numeroTessera);
                             System.out.println("Tessera scaduta! Vuoi rinnovarla? si/no");
                             String sceltaRinnovoTessera = scanner.nextLine().toLowerCase();
                             switch (sceltaRinnovoTessera) {
@@ -130,6 +130,7 @@ public class MainUser {
                             }
                         }
 
+                        tessera = tesseraDAO.findTessera(numeroTessera);
                         if (tesseraDAO.checkRuolo(tessera)) {
                             System.out.println("Buongiorno Amministratore: " + tessera.getUser().getNome() + " " + tessera.getUser().getCognome());
 
@@ -281,7 +282,7 @@ public class MainUser {
                                             sceltaMezzo = scanner.nextLong();
                                             scanner.nextLine();
                                             mezzoScelto = parcoMezziDAO.findById(sceltaMezzo);
-                                            System.out.println("Totale biglietti vidimati sul mezzo " + mezzoScelto.getLinea() + ": " +  mezzoScelto.getTratta().getNumeroBigliettiVidimati());
+                                            System.out.println("Totale biglietti vidimati sul mezzo " + mezzoScelto.getLinea() + ": " + mezzoScelto.getTratta().getNumeroBigliettiVidimati());
                                             break;
                                         case 4://Totale biglietti vidimati in un periodo di tempo
                                             break;

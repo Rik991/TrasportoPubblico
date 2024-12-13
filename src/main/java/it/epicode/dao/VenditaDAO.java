@@ -43,12 +43,12 @@ public class VenditaDAO {
 
 
     public List<DistributoreAutomatico> findAllDistributori() {
-        return em.createQuery("SELECT d FROM DistributoreAutomatico d", DistributoreAutomatico.class)
+        return em.createQuery("SELECT d FROM DistributoreAutomatico d ORDER BY d.id", DistributoreAutomatico.class)
                 .getResultList();
     }
 
     public List<Rivenditore> findAllRivenditori() {
-        return em.createQuery("SELECT r FROM Rivenditore r", Rivenditore.class)
+        return em.createQuery("SELECT r FROM Rivenditore r ORDER BY r.id", Rivenditore.class)
                 .getResultList();
     }
 
