@@ -1,9 +1,6 @@
 package it.epicode.dao;
 
-import it.epicode.entity.biglietteria.Biglietto;
-import it.epicode.entity.biglietteria.DistributoreAutomatico;
-import it.epicode.entity.biglietteria.Rivenditore;
-import it.epicode.entity.biglietteria.Vendita;
+import it.epicode.entity.biglietteria.*;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
@@ -56,6 +53,11 @@ public class VenditaDAO {
 
     public List<Biglietto> findBigliettiByVenditore(Vendita venditore){
         return em.createQuery("SELECT b FROM Biglietto b WHERE b.vendita = :vendita", Biglietto.class)
+                .setParameter("vendita", venditore)
+                .getResultList();
+
+    } public List<Abbonamento> findAbbonamentiByVenditore(Vendita venditore){
+        return em.createQuery("SELECT a FROM Abbonamento a WHERE a.vendita = :vendita", Abbonamento.class)
                 .setParameter("vendita", venditore)
                 .getResultList();
     }

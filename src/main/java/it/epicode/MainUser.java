@@ -110,10 +110,10 @@ public class MainUser {
                         Tessera tessera = tesseraDAO.findTessera(numeroTessera);
                         if (tesseraDAO.checkTessera(numeroTessera)) {
                             throw new TesseraNotFoundException("Tessera non trovata!");
-                        }else if(tesseraDAO.findTessera(numeroTessera).getDataScadenza().isBefore(LocalDate.now())){
+                        } else if (tesseraDAO.findTessera(numeroTessera).getDataScadenza().isBefore(LocalDate.now())) {
                             System.out.println("Tessera scaduta! Vuoi rinnovarla? si/no");
                             String sceltaRinnovoTessera = scanner.nextLine().toLowerCase();
-                            switch (sceltaRinnovoTessera){
+                            switch (sceltaRinnovoTessera) {
                                 case "si":
                                     tessera.setDataScadenza(tessera.getDataScadenza().plusYears(1));
                                     tesseraDAO.update(tessera);
@@ -136,7 +136,7 @@ public class MainUser {
 
                             int sceltaAmministratore = scanner.nextInt();
                             scanner.nextLine();
-                            switch (sceltaAmministratore) { //switch admin gestione tratte
+                            switch (sceltaAmministratore) {
                                 case 1:
                                     System.out.println("Cosa vuoi fare? 1. Modifica linea 2. Elimina linea 3. Dichiara ritardo(in Viaggio) 4. Esci");
                                     int sceltaAmministratoreGestioneTratta = scanner.nextInt();
@@ -244,15 +244,38 @@ public class MainUser {
                                     //switch principale (amministratore)
                                     break;
                                 case 2:
-
+                                    List<ParcoMezzi> mezzi = parcoMezziDAO.findAll();
+                                    System.out.println("Lista mezzi: ");
+                                    for (int i = 0; i < parcoMezziDAO.findAll().size(); i++) {
+                                        System.out.println((i + 1) + " " + mezzi.get(i).getLinea());
+                                    }
+                                    System.out.println("Scegli il mezzo da controllare");
+                                    Long sceltaMezzo = scanner.nextLong();
+                                    scanner.nextLine();
+                                    ParcoMezzi mezzoScelto = parcoMezziDAO.findById(sceltaMezzo);
+                                    if (mezzoScelto.isInServizio()) {
+                                        System.out.println("Il mezzo scelto è in servizio!");
+                                    } else {
+                                        System.out.println("Il mezzo scelto è in manutenzione!");
+                                    }
+                                    System.out.println(mezzoScelto.getLinea() + " Tempo in servizio: " + mezzoScelto.getTempoInServizio() + " h" + "\nTempo in manutenzione: " + mezzoScelto.getTempoInManutenzione() + " h");
                                     break;
-                                case 3://statistiche venditori
-                                    //                List<Biglietto> listaBigliettiVenditore1 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(1L));
-//                List<Biglietto> listaBigliettiVenditore2 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(2L));
-//                List<Biglietto> listaBigliettiVenditore3 = venditaDAO.findBigliettiByVenditore(venditaDAO.findById(3L));//
-//                System.out.println("Biglietti venduti da Rivenditore1: " + listaBigliettiVenditore1.size());
-//                System.out.println("Biglietti venduti da Distributore1: " + listaBigliettiVenditore2.size());
-
+                                case 3:
+                                    System.out.println("Contralla statistiche vendite!");
+                                    List<Vendita> venditori = venditaDAO.findAll();
+                                    System.out.println("Lista venditori");
+                                    for (int i = 0; i < venditori.size(); i++) {
+                                        System.out.println(venditori.get(i).getId() + " " + venditori.get(i).getNome());
+                                    }
+                                    System.out.println("Scegli il venditore da controllare");
+                                    Long sceltaVenditore = scanner.nextLong();
+                                    scanner.nextLine();
+                                    Vendita venditoreScelto = venditaDAO.findById(sceltaVenditore);
+                                    List<Biglietto> listaBigliettiVenditore = venditaDAO.findBigliettiByVenditore(venditoreScelto);
+                                    List<Abbonamento> listaAbbonamentiVenditore = venditaDAO.findAbbonamentiByVenditore(venditoreScelto);
+                                    System.out.println(venditoreScelto.getNome());
+                                    System.out.println("Biglietti venduti: " + listaBigliettiVenditore.size());
+                                    System.out.println("Abbonamenti venduti: " + listaAbbonamentiVenditore.size());
                                     break;
                                 default:
                                     throw new InputMismatchException("Errore d'inserimento, per favore digitare 1 o 2!");
@@ -273,7 +296,7 @@ public class MainUser {
                             System.out.println("il viaggio durerà circa " + tratte.get(trattaScelta).getDurataEffettiva() + " minuti");
 
 
-                            if (tessera.getDataScadenza().isBefore(LocalDate.now())){
+                            if (tessera.getDataScadenza().isBefore(LocalDate.now())) {
                                 System.out.println("Devi prima rinnovare la tua tessera!");
                                 break;
                             }

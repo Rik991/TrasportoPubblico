@@ -40,6 +40,8 @@ public class MainCreate {
         Tratta tratta2 = new Tratta();
         Tratta tratta3 = new Tratta();
         Tratta tratta4 = new Tratta();
+        Tratta tratta5 = new Tratta();
+        Tratta tratta6 = new Tratta();
 
         tratta1.setZonaPartenza("Roma");
         tratta1.setZonaArrivo("Milano");
@@ -48,42 +50,60 @@ public class MainCreate {
         tratta1.setDurataEffettiva(LocalTime.of(8, 30));
         trattaDAO.save(tratta1);
 
-        tratta2.setZonaPartenza("Marsala");
-        tratta2.setZonaArrivo("Messina");
+        tratta2.setZonaPartenza("Palermo");
+        tratta2.setZonaArrivo("Catania");
         tratta2.setOraDiPartenza(LocalTime.of(9, 0));
         tratta2.setOraDiArrivo(LocalTime.of(12, 30));
         tratta2.setDurataEffettiva(LocalTime.of(3, 30));
         trattaDAO.save(tratta2);
 
-        //tratta per il tram
-        tratta3.setZonaPartenza("Stazione Termini");
-        tratta3.setZonaArrivo("Fontana di Trevi");
-        tratta3.setOraDiPartenza(LocalTime.of(8, 0));
-        tratta3.setOraDiArrivo(LocalTime.of(8, 30));
-        tratta3.setDurataEffettiva(LocalTime.of(0, 30));
+        tratta3.setZonaPartenza("Napoli");
+        tratta3.setZonaArrivo("Bologna");
+        tratta3.setOraDiPartenza(LocalTime.of(9, 0));
+        tratta3.setOraDiArrivo(LocalTime.of(15, 30));
+        tratta3.setDurataEffettiva(LocalTime.of(6, 30));
         trattaDAO.save(tratta3);
 
-        tratta4.setZonaPartenza("Stazione Lambrate (MI)");
-        tratta4.setZonaArrivo("Piazza del Duomo");
-        tratta4.setOraDiPartenza(LocalTime.of(16, 0));
-        tratta4.setOraDiArrivo(LocalTime.of(17, 30));
-        tratta4.setDurataEffettiva(LocalTime.of(1, 30));
+        //tratta per il tram
+        tratta4.setZonaPartenza("Stazione Termini");
+        tratta4.setZonaArrivo("Fontana di Trevi");
+        tratta4.setOraDiPartenza(LocalTime.of(8, 0));
+        tratta4.setOraDiArrivo(LocalTime.of(8, 30));
+        tratta4.setDurataEffettiva(LocalTime.of(0, 30));
         trattaDAO.save(tratta4);
+
+        tratta5.setZonaPartenza("Stazione Lambrate (MI)");
+        tratta5.setZonaArrivo("Piazza del Duomo");
+        tratta5.setOraDiPartenza(LocalTime.of(16, 30));
+        tratta5.setOraDiArrivo(LocalTime.of(17, 30));
+        tratta5.setDurataEffettiva(LocalTime.of(1, 30));
+        trattaDAO.save(tratta5);
+
+        tratta6.setZonaPartenza("Lorenteggio");
+        tratta6.setZonaArrivo("Duomo");
+        tratta6.setOraDiPartenza(LocalTime.of(12, 0));
+        tratta6.setOraDiArrivo(LocalTime.of(12, 30));
+        tratta6.setDurataEffettiva(LocalTime.of(0,30));
+        trattaDAO.save(tratta6);
 
         List<Tratta> tratte = new ArrayList<>();
         tratte.add(tratta1);
         tratte.add(tratta2);
         tratte.add(tratta3);
         tratte.add(tratta4);
+        tratte.add(tratta5);
+        tratte.add(tratta6);
 
         //creiamo nuovi mezzi
         ParcoMezzi autobus1 = new Autobus();
         ParcoMezzi autobus2 = new Autobus();
+        ParcoMezzi autobus3 = new Autobus();
         ParcoMezzi tram1 = new Tram();
         ParcoMezzi tram2 = new Tram();
+        ParcoMezzi tram3 = new Tram();
 
-        autobus1.setInServizio(true); //in servizio
-        autobus1.setTratta(tratta1); //roma-milano
+        autobus1.setInServizio(true);
+        autobus1.setTratta(tratta1);
         autobus1.setLinea("A1");
         autobus1.setTempoInServizio(LocalTime.of(8, 0));
         autobus1.setTempoInManutenzione(LocalTime.of(0, 0));
@@ -91,8 +111,8 @@ public class MainCreate {
         autobus1.setTotaleTratteEffettuate(1);
         parcoMezziDAO.save(autobus1);
 
-        autobus2.setInServizio(false); //in manutenzione
-        autobus2.setTratta(tratta2); //marsala-messina
+        autobus2.setInServizio(false);
+        autobus2.setTratta(tratta2);
         autobus2.setLinea("A2");
         autobus2.setTempoInServizio(LocalTime.of(0, 0));
         autobus2.setTempoInManutenzione(LocalTime.of(23, 0));
@@ -100,17 +120,26 @@ public class MainCreate {
         autobus2.setTotaleTratteEffettuate(0);
         parcoMezziDAO.save(autobus2);
 
-        tram1.setInServizio(true); //in servizio
-        tram1.setTratta(tratta3);
+        autobus3.setInServizio(true);
+        autobus3.setTratta(tratta3);
+        autobus3.setLinea("A3");
+        autobus3.setTempoInServizio(LocalTime.of(23, 0));
+        autobus3.setTempoInManutenzione(LocalTime.of(0, 0));
+        autobus3.setNumeroBigliettiVidimati(0);
+        autobus3.setTotaleTratteEffettuate(0);
+        parcoMezziDAO.save(autobus3);
+
+        tram1.setInServizio(true);
+        tram1.setTratta(tratta4);
         tram1.setLinea("T1");
         tram1.setTempoInServizio(LocalTime.of(18, 0));
         tram1.setTempoInManutenzione(LocalTime.of(0, 0));
-        tram1.setNumeroBigliettiVidimati(400);
-        tram1.setTotaleTratteEffettuate(20);
+        tram1.setNumeroBigliettiVidimati(40);
+        tram1.setTotaleTratteEffettuate(2);
         parcoMezziDAO.save(tram1);
 
-        tram2.setInServizio(false); //in manutenzione
-        tram2.setTratta(tratta4);
+        tram2.setInServizio(false);
+        tram2.setTratta(tratta5);
         tram2.setLinea("T2");
         tram2.setTempoInServizio(LocalTime.of(0, 0));
         tram2.setTempoInManutenzione(LocalTime.of(23, 0));
@@ -118,13 +147,33 @@ public class MainCreate {
         tram2.setTotaleTratteEffettuate(0);
         parcoMezziDAO.save(tram2);
 
+        tram3.setInServizio(false);
+        tram3.setTratta(tratta6);
+        tram3.setLinea("T3");
+        tram3.setTempoInServizio(LocalTime.of(10, 0));
+        tram3.setTempoInManutenzione(LocalTime.of(0, 0));
+        tram3.setNumeroBigliettiVidimati(0);
+        tram3.setTotaleTratteEffettuate(0);
+        parcoMezziDAO.save(tram3);
+
         //creiamo rivenditori
 
         Rivenditore rivenditore = new Rivenditore();
-        DistributoreAutomatico distributore1 = new DistributoreAutomatico();
+        Rivenditore rivenditore2 = new Rivenditore();
+
+        rivenditore.setNome("Tabacchino");
+        rivenditore2.setNome("Edicola");
+
+        DistributoreAutomatico distributore = new DistributoreAutomatico();
         DistributoreAutomatico distributore2 = new DistributoreAutomatico();
+
+        distributore.setNome("Distributore Tabacchino");
+        distributore2.setNome("Distributore Edicola");
+
         venditaDAO.save(rivenditore);
-        venditaDAO.save(distributore1);
+        venditaDAO.save(rivenditore2);
+
+        venditaDAO.save(distributore);
         venditaDAO.save(distributore2);
 
         //creiamo nuovi user
@@ -143,8 +192,6 @@ public class MainCreate {
         amministratore2.setRuolo(Ruolo.AMMINISTRATORE);
 
         userDAO.save(amministratore2);
-
-
         List<User> passeggeri = new ArrayList<>();
 
         for (int i = 0; i < 50; i++) {
@@ -157,9 +204,10 @@ public class MainCreate {
 
         userDAO.saveAllUtenti(passeggeri);
 
-
         //creiamo tessere
         List<Tessera> tessere = new ArrayList<>();
+        List<Tessera> tessere2 = new ArrayList<>();
+
 
         Tessera tessera1 = new Tessera();
         tessera1.setNumeroTessera(1001L);
@@ -168,9 +216,7 @@ public class MainCreate {
         tessera1.setAttiva(true);
         tessera1.setUser(amministratore);
         tessera1.setVendita(rivenditore);
-
         tessere.add(tessera1);
-
 
         Tessera tessera2 = new Tessera();
         tessera2.setNumeroTessera(1002L);
@@ -179,125 +225,21 @@ public class MainCreate {
         tessera2.setAttiva(true);
         tessera2.setUser(amministratore2);
         tessera2.setVendita(rivenditore);
-
         tessere.add(tessera2);
 
         tesseraDAO.saveAllTessere(tessere);
 
-//        for (int i = 0; i < 3; i++) {
-//            Tessera tessera = new Tessera();
-//            tessera.setNumeroTessera(1003L + i);
-//            tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
-//            tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
-//            tessera.setAttiva(true);
-//            tessera.setVendita(rivenditore);
-//            tessera.setUser(passeggeri.get(i));
-//            tessere.add(tessera);
-//        }
-//
-//
-//        List<Tessera> tessereDistributore = new ArrayList<>();
-//        for (int i = 3; i < 7; i++) {
-//            Tessera tessera = new Tessera();
-//            tessera.setNumeroTessera(2000L + i);
-//            tessera.setDataEmissione(LocalDate.now());//sistemare date per scadenza
-//            tessera.setDataScadenza(tessera.getDataEmissione().plusYears(1));
-//            tessera.setAttiva(true);
-//            tessera.setVendita(distributore1);
-//            tessera.setUser(passeggeri.get(i));
-//            tessereDistributore.add(tessera);
-//        }
-//        tesseraDAO.saveAllTessere(tessereDistributore);
-//
-//        //tessere senza abbonamento
-//        Tessera tessera4 = new Tessera();
-//        tessera4.setNumeroTessera(3001L);
-//        tessera4.setDataEmissione(LocalDate.now());
-//        tessera4.setDataScadenza(tessera4.getDataEmissione().plusYears(1));
-//        tessera4.setAttiva(true);
-//        tessera4.setVendita(rivenditore);
-//        tessera4.setUser(passeggeri.get(11));
-//        tesseraDAO.save(tessera4);
-//
-//
-//        Tessera tessera5 = new Tessera();
-//        tessera5.setNumeroTessera(3002L);
-//        tessera5.setDataEmissione(LocalDate.now());
-//        tessera5.setDataScadenza(tessera5.getDataEmissione().plusYears(1));
-//        tessera5.setAttiva(true);
-//        tessera5.setVendita(distributore1);
-//        tessera5.setUser(passeggeri.get(12));
-//        tesseraDAO.save(tessera5);
-//
-
-//        //creiamo biglietti
-//        List<Biglietto> biglietti = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            Biglietto biglietto = new Biglietto();
-//            biglietto.setVidimato(false);
-//            biglietto.setVendita(rivenditore);
-//            biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-//            biglietti.add(biglietto);
-//        }
-//        bigliettoDAO.saveAllBiglietti(biglietti);
-//
-//        List<Biglietto> bigliettiDistributore = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            Biglietto biglietto = new Biglietto();
-//            biglietto.setVidimato(false);
-//            biglietto.setVendita(distributore1);
-//            biglietto.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-//            bigliettiDistributore.add(biglietto);
-//        }
-//        bigliettoDAO.saveAllBiglietti(bigliettiDistributore);
-//
-//
-//        //creiamo abbonamenti
-//        List<Abbonamento> abbonamenti = new ArrayList<>();
-//        for (int i = 0; i < 6; i++) {
-//            Abbonamento abbonamento = new Abbonamento();
-//            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-//            abbonamento.setTessera(tessere.get(i));
-//            abbonamento.setVendita(rivenditore);
-//            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
-//            abbonamento.setDataEmissione(LocalDate.now());
-//            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
-//                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
-//            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
-//            abbonamenti.add(abbonamento);
-//        }
-//        abbonamentoDAO.saveAllAbbonamenti(abbonamenti);
-//
-//        List<Abbonamento> abbonamentiDistributore = new ArrayList<>();
-//        for (int i = 0; i < 4; i++) {
-//            Abbonamento abbonamento = new Abbonamento();
-//            abbonamento.setTratta(tratte.get(faker.number().numberBetween(0, tratte.size())));
-//            abbonamento.setTessera(tessereDistributore.get(i));
-//            abbonamento.setVendita(distributore1);
-//            abbonamento.setValidita(faker.options().option(TipoAbbonamento.class));
-//            abbonamento.setDataEmissione(LocalDate.now());
-//            if (abbonamento.getValidita().equals(TipoAbbonamento.SETTIMANALE))
-//                abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(7));
-//            else abbonamento.setDataScadenza(abbonamento.getDataEmissione().plusDays(30));
-//            abbonamenti.add(abbonamento);
-//            abbonamentiDistributore.add(abbonamento);
-//        }
-//        abbonamentoDAO.saveAllAbbonamenti(abbonamentiDistributore);
-
-
         rivenditore.setTessere(tessere);
-//        rivenditore.setBiglietti(biglietti);
-//        rivenditore.setAbbonamenti(abbonamenti);
+        rivenditore2.setTessere(tessere2);
+
         venditaDAO.update(rivenditore);
+        venditaDAO.update(rivenditore2);
 
-        distributore1.setInServizio(true);
-//        distributore1.setTessere(tessereDistributore);
-//        distributore1.setBiglietti(biglietti);
-//        distributore1.setAbbonamenti(abbonamenti);
-        venditaDAO.update(distributore1);
+        distributore.setInServizio(true);
+        venditaDAO.update(distributore);
 
-
-        distributore2.setInServizio(false); //rotto
+        distributore2.setInServizio(false);
+        venditaDAO.update(distributore2);
 
 
     }
